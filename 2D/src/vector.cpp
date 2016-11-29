@@ -14,6 +14,7 @@ Vector::Vector(const int n)
 Vector::Vector(const Vector &other)
 {
 	size = other.size;
+	elements = new int[size];
 	for (int i = 0; i < size; i++)
 	{
 		elements[i] = other.elements[i];
