@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <iostream>
 
 using namespace std;
@@ -33,6 +36,8 @@ class Vector
 		double& operator[](const int index); //T
 		//Other functions
 		const int getDimension() const; //T
+		const double dot(const Vector& v) const; //T
+		const double norm() const; //T
 		friend ostream& operator<<(ostream& os, const Vector& other); //T
 };
 
@@ -47,3 +52,5 @@ const Vector operator-(int constant, const Vector& v); //T
 const Vector operator*(double constant, const Vector& v); //T
 const Vector operator*(float constant, const Vector& v); //T
 const Vector operator*(int constant, const Vector& v); //T
+
+#endif

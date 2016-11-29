@@ -9,6 +9,8 @@ int main()
 
 	int n = 3;
 	int dimension;
+	double dot;
+	double norm;
 	bool result;
 	
 	Vector v1(n);
@@ -148,10 +150,6 @@ int main()
 	result = v3 != v1;
 	cout << "V3 /= 2 -> V3 != V1" << endl << result << endl << endl;
 
-	cout << "getDimension test" << endl;
-	dimension = v1.getDimension();
-	cout << "V1 getDimension" << endl << dimension << endl << endl;
-
 	cout << "WRONG DIMENSIONS TESTS" << endl << endl;
 
 	try
@@ -216,6 +214,20 @@ int main()
 	{
 		cout << "V5(3) != V1(2)" << endl << err.what() << endl << endl;
 	}
+
+	cout << "OTHER FUNCTIONS TESTS" << endl << endl;
+
+	cout << "getDimension test" << endl;
+	dimension = v1.getDimension();
+	cout << "V1 getDimension" << endl << dimension << endl << endl;
+
+	cout << "Dot test" << endl;
+	dot = v1.dot(v2);
+	cout << "V1.dot(V2)" << endl << dot << endl << endl;
+
+	cout << "Norm test" << endl;
+	norm = v1.norm();
+	cout << "V1.norm()" << endl << norm << endl << endl;
 
 	return 0;
 }
