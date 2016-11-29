@@ -274,12 +274,16 @@ const double Vector::norm() const
 
 ostream& operator<<(ostream& os, const Vector& other)
 {
-	os << '[';
+	os << '(';
 	for (int i = 0; i < other.size; i++)
 	{
-		os << other.elements[i] << ", ";
+		os << other.elements[i];
+		if (i != other.size - 1)
+		{
+			os << ", ";
+		}
 	}
-	os << ']';
+	os << ')';
 
 	return os;
 }

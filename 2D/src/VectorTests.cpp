@@ -158,7 +158,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) = V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) = V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	try
@@ -167,7 +167,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) += V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) += V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	try
@@ -176,7 +176,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) = V5(3) + V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) = V5(4) + V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	try
@@ -185,7 +185,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) -= V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) -= V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	try
@@ -194,7 +194,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) = V5(3) - V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) = V5(4) - V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	try
@@ -203,7 +203,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) == V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) == V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	try
@@ -212,7 +212,7 @@ int main()
 	}
 	catch(const runtime_error& err)
 	{
-		cout << "V5(3) != V1(2)" << endl << err.what() << endl << endl;
+		cout << "V5(4) != V1(3)" << endl << err.what() << endl << endl;
 	}
 
 	cout << "OTHER FUNCTIONS TESTS" << endl << endl;
@@ -224,6 +224,16 @@ int main()
 	cout << "Dot test" << endl;
 	dot = v1.dot(v2);
 	cout << "V1.dot(V2)" << endl << dot << endl << endl;
+
+	cout << "Dot test with invalid dimension" << endl;
+	try
+	{
+		dot = v1.dot(v5);
+	}
+	catch(const runtime_error& err)
+	{
+		cout << "V1[3](V5[4])" << endl << err.what() << endl << endl;
+	}
 
 	cout << "Norm test" << endl;
 	norm = v1.norm();
