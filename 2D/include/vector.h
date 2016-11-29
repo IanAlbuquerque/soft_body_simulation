@@ -15,9 +15,13 @@ class Vector
 		Vector & operator=(const Vector &rhs); //T
 		Vector & operator=(const double rhs); //T
 		Vector & operator+=(const Vector &rhs); //T
+		Vector & operator+=(const double rhs); //T
 		Vector & operator-=(const Vector &rhs); //T
+		Vector & operator-=(const double rhs); //T
 		const Vector operator+(const Vector &other) const; //T
+		const Vector operator+(const double other) const; //T
 		const Vector operator-(const Vector &other) const; //T
+		const Vector operator-(const double other) const; //T
 		bool operator==(const Vector &other) const; //T
 		bool operator!=(const Vector &other) const; //T
 		//Other operations
@@ -31,3 +35,15 @@ class Vector
 		const int getDimension() const; //T
 		friend ostream& operator<<(ostream& os, const Vector& other); //T
 };
+
+const Vector operator+(double constant, const Vector& v); //T
+const Vector operator+(float constant, const Vector& v); //T
+const Vector operator+(int constant, const Vector& v); //T
+
+const Vector operator-(double constant, const Vector& v); //T
+const Vector operator-(float constant, const Vector& v); //T
+const Vector operator-(int constant, const Vector& v); //T
+
+const Vector operator*(double constant, const Vector& v); //T
+const Vector operator*(float constant, const Vector& v); //T
+const Vector operator*(int constant, const Vector& v); //T
