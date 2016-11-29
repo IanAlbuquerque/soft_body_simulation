@@ -14,39 +14,52 @@ private:
 
 	class Row
 	{
+    friend class Matrix;
 	private:
 		Matrix& _matrix;
 		int _row_number;
+		Row(Matrix& matrix,const int row_number) : _matrix(matrix), _row_number(row_number) {}
 	public:
-		Row(Matrix& matrix,const int _row_number) : _matrix(matrix), _row_number(_row_number) {}
         double& operator[](const int col)
         { 
-        	return _matrix.M[this->_row_number]*[col];
-        }
-        const double& operator[](const int col) const
-        { 
-        	return _matrix.M[this->_row_number]*[col];
-        }		
+        	return _matrix.M[this->_row_number][col];
+        }	
 	};
 
 public:
-	Matrix::Matrix(int num_rows, int num_cols);
-	Matrix::Matrix(const Matrix& other);
-	Matrix& Matrix::operator=(const Matrix &other);
-	Matrix& Matrix::operator+=(const Matrix &other);
-	Matrix& Matrix::operator-=(const Matrix &other);
-	Matrix& Matrix::operator*=(const double constant);
-	Matrix& Matrix::operator*=(const double constant);
-	const Matrix Matrix::operator+(const Matrix &other) const;
-	const Matrix Matrix::operator-(const Matrix &other) const;
-	const Matrix Matrix::operator*(const double constant) const;
-	const Matrix Matrix::operator/(const double constant) const;
-	bool Matrix::operator==(const Matrix &other) const;
-	bool Matrix::operator!=(const Matrix &other) const;
-	Matrix::~Matrix();
-	const Row& operator[](const int row) const;
-	Row& operator[](const int row);
-	friend ostream& operator<<(ostream& os, const Matrix& matrix); 
+	Matrix(int num_rows, int num_cols);
+	Matrix(const Matrix& other);
+	Matrix& operator=(const Matrix &other);
+	Matrix& operator=(const double constant);
+	Matrix& operator+=(const Matrix &other);
+	Matrix& operator+=(const double constant);
+	Matrix& operator-=(const Matrix &other);
+	Matrix& operator-=(const double constant);
+	Matrix& operator*=(const double constant);
+	Matrix& operator/=(const double constant);
+	const Matrix operator+(const Matrix &other) const;
+	const Matrix operator-(const Matrix &other) const;
+	const Matrix operator+(const double constant) const;
+	const Matrix operator-(const double constant) const;
+	const Matrix operator*(const double constant) const;
+	const Matrix operator/(const double constant) const;
+	bool operator==(const Matrix &other) const;
+	bool operator!=(const Matrix &other) const;
+	~Matrix();
+	Row operator[](const int row);
+	friend ostream& operator<<(ostream& os, const Matrix& matrix);
 };
+
+
+ostream& operator<<(ostream& os, const Matrix& matrix);
+const Matrix operator*(double constant, const Matrix& matrix);
+const Matrix operator*(float constant, const Matrix& matrix);
+const Matrix operator*(int constant, const Matrix& matrix);
+const Matrix operator+(double constant, const Matrix& matrix);
+const Matrix operator+(float constant, const Matrix& matrix);
+const Matrix operator+(int constant, const Matrix& matrix);
+const Matrix operator-(double constant, const Matrix& matrix);
+const Matrix operator-(float constant, const Matrix& matrix);
+const Matrix operator-(int constant, const Matrix& matrix);
 
 #endif
