@@ -176,12 +176,12 @@ Matrix::~Matrix()
 	delete this->M;
 }
 
-const double& operator[](const int row) const
+const Row& operator[](const int row) const
 {
 	return Row(*this, row);
 }
 
-double& operator[](const int row)
+Row& operator[](const int row)
 {
 	return Row(*this, row);
 }

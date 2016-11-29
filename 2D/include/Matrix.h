@@ -26,10 +26,22 @@ private:
 	};
 
 public:
-	Matrix(int num_rows, int num_cols);
-	Matrix(const Matrix& other);
-	~Matrix();
-	Matrix& operator=(const Matrix &other);
+	Matrix::Matrix(int num_rows, int num_cols);
+	Matrix::Matrix(const Matrix& other);
+	Matrix& Matrix::operator=(const Matrix &other);
+	Matrix& Matrix::operator+=(const Matrix &other);
+	Matrix& Matrix::operator-=(const Matrix &other);
+	Matrix& Matrix::operator*=(const double constant);
+	Matrix& Matrix::operator*=(const double constant);
+	const Matrix Matrix::operator+(const Matrix &other) const;
+	const Matrix Matrix::operator-(const Matrix &other) const;
+	const Matrix Matrix::operator*(const double constant) const;
+	const Matrix Matrix::operator/(const double constant) const;
+	bool Matrix::operator==(const Matrix &other) const;
+	bool Matrix::operator!=(const Matrix &other) const;
+	Matrix::~Matrix();
+	const Row& operator[](const int row) const;
+	Row& operator[](const int row);
 };
 
 #endif
