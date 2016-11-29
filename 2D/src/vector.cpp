@@ -62,7 +62,6 @@ Vector & Vector::operator=(const double rhs)
 
 Vector& Vector::operator+=(const Vector &rhs) 
 {
-
 	if(this->size != rhs.size) {
 		throw std::runtime_error("DIMENSOES DIFERENTES");
 	}
@@ -70,6 +69,16 @@ Vector& Vector::operator+=(const Vector &rhs)
 	for(int i = 0; i < rhs.size; i++)
 	{
 		this->elements[i] = this->elements[i] + rhs.elements[i];
+	}
+
+	return *this;
+}
+
+Vector& Vector::operator+=(const double rhs) 
+{
+	for(int i = 0; i < this->size; i++)
+	{
+		this->elements[i] = this->elements[i] + rhs;
 	}
 
 	return *this;
@@ -90,14 +99,64 @@ Vector& Vector::operator-=(const Vector &rhs)
 	return *this;
 }
 
+Vector& Vector::operator-=(const double rhs) 
+{
+	for(int i = 0; i < this->size; i++)
+	{
+		this->elements[i] = this->elements[i] - rhs;
+	}
+
+	return *this;
+}
+
 const Vector Vector::operator+(const Vector &other) const
 {
 	return Vector(*this) += other;
 }
 
+const Vector Vector::operator+(const double other) const
+{
+	return Vector(*this) += other;
+}
+
+const Vector operator+(int constant, const Vector& v)
+{
+	return v + (double)constant;  
+}
+
+const Vector operator+(float constant, const Vector& v)
+{
+	return v + (double)constant;  
+}
+
+const Vector operator+(double constant, const Vector& v)
+{
+	return v + constant;  
+}
+
 const Vector Vector::operator-(const Vector &other) const
 {
 	return Vector(*this) -= other;
+}
+
+const Vector Vector::operator-(const double other) const
+{
+	return Vector(*this) -= other;
+}
+
+const Vector operator-(int constant, const Vector& v)
+{
+	return (-1 * v) + (double)constant;  
+}
+
+const Vector operator-(float constant, const Vector& v)
+{
+	return (-1 * v) + (double)constant;  
+}
+
+const Vector operator-(double constant, const Vector& v)
+{
+	return (-1 * v) + constant;  
 }
 
 bool Vector::operator==(const Vector &other) const
@@ -149,6 +208,21 @@ Vector& Vector::operator/=(const double rhs)
 const Vector Vector::operator*(const double other) const
 {
 	return Vector(*this) *= other;
+}
+
+const Vector operator*(int constant, const Vector& v)
+{
+	return v * (double)constant;  
+}
+
+const Vector operator*(float constant, const Vector& v)
+{
+	return v * (double)constant;  
+}
+
+const Vector operator*(double constant, const Vector& v)
+{
+	return v * constant;  
 }
 
 const Vector Vector::operator/(const double other) const

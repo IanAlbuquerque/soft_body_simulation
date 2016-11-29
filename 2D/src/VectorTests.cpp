@@ -17,6 +17,12 @@ int main()
 	Vector vz(n);
 	Vector v5(n+1);
 
+	//Constants
+	int j = 2;
+	float f = 2.0;
+	double d = 2.0;
+	//
+
 	for (int i = 0; i < n; i++)
 	{
 		v1[i] = (double)(i + 1);
@@ -40,21 +46,61 @@ int main()
 	vz = 0;
 	cout << "Vz = 0" << endl << vz << endl << endl;
 
-	cout << "+= operator test" << endl;
+	cout << "+= operator test (vector)" << endl;
 	v1 += v2;
 	cout << "V1 += V2" << endl << v1 << endl << endl;
 
-	cout << "-= operator test" << endl;
+	cout << "+= operator test (double)" << endl;
+	v1 += d;
+	cout << "V1 += 2.0" << endl << v1 << endl << endl;
+
+	cout << "-= operator test (vector)" << endl;
 	v1 -= v2;
 	cout << "V1 -= V2" << endl << v1 << endl << endl;
+
+	cout << "-= operator test (double)" << endl;
+	v1 -= d;
+	cout << "V1 -= 2.0" << endl << v1 << endl << endl;
 
 	cout << "- operator test" << endl;
 	v1 = v1 - v2;
 	cout << "V1 = V1 - V2" << endl << v1 << endl << endl;
 
-	cout << "+ operator test" << endl;
+	cout << "+ operator test (vector)" << endl;
 	v1 = v1 + v2;
 	cout << "V1 = V1 + V2" << endl << v1 << endl << endl;
+
+	cout << "+ operator test (double)" << endl;
+	v1 = v1 + d;
+	cout << "V1 = v1 + 2.0" << endl << v1 << endl << endl;
+
+	cout << "- operator test (double)" << endl;
+	v1 = v1 - d;
+	cout << "V1 = v1 - 2.0" << endl << v1 << endl << endl;
+
+	cout << "+ operator test (int)" << endl;
+	v3 = j + v3;
+	cout << "V3 = 2 + V3" << endl << v3 << endl << endl;
+
+	cout << "+ operator test (float)" << endl;
+	v3 = f + v3;
+	cout << "V3 = 2.0 + V3" << endl << v3 << endl << endl;
+
+	cout << "+ operator test (double)" << endl;
+	v3 = d + v3;
+	cout << "V3 = 2.0 + V3" << endl << v3 << endl << endl;
+
+	cout << "- operator test (int)" << endl;
+	v3 = j - v3;
+	cout << "V3 = 2 - V3" << endl << v3 << endl << endl;
+
+	cout << "- operator test (float)" << endl;
+	v3 = f - v3;
+	cout << "V3 = 2.0 - V3" << endl << v3 << endl << endl;
+
+	cout << "- operator test (double)" << endl;
+	v3 = d - v3;
+	cout << "V3 = 2.0 - V3" << endl << v3 << endl << endl;
 
 	cout << "*= operator test" << endl;
 	v1 *= 2;
@@ -71,6 +117,18 @@ int main()
 	cout << "* operator test" << endl;
 	v1 = v1 * 2;
 	cout << "V1 = V1 * 2" << endl << v1 << endl << endl;
+
+	cout << "* operator test (int)" << endl;
+	v3 = j * v3;
+	cout << "V3 = 2 * V3" << endl << v3 << endl << endl;
+
+	cout << "* operator test (float)" << endl;
+	v3 = f * v3;
+	cout << "V3 = 2.0 * V3" << endl << v3 << endl << endl;
+
+	cout << "* operator test (double)" << endl;
+	v3 = d * v3;
+	cout << "V3 = 2.0 * V3" << endl << v3 << endl << endl;
 
 	cout << "== (true) operator test" << endl;
 	result = v3 == v1;
