@@ -1,6 +1,8 @@
 #include "vector.h"
 #include <stdexcept>
 
+using namespace std;
+
 /*****************************
 	INIT & DEINIT
 *****************************/
@@ -160,4 +162,16 @@ double& Vector::operator[](const int index)
 const int Vector::getDimension(const Vector &v) const
 {
 	return v.size;
+}
+
+ostream& operator<<(ostream& os, const Vector& other)
+{
+	os << '[';
+	for (int i = 0; i < other.size; i++)
+	{
+		os << other.elements[i] << ',';
+	}
+	os << ']';
+	
+	return os;
 }

@@ -1,3 +1,6 @@
+#include <iostream>
+
+using namespace std;
 
 class Vector
 {
@@ -25,4 +28,5 @@ class Vector
 		double& operator[](const int index);
 		//Other functions
 		const int getDimension(const Vector &v) const;
+		friend ostream& operator<<(ostream& os, const Vector& other);
 };
