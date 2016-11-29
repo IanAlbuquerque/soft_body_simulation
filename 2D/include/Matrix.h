@@ -1,6 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include "Vector.h"
 #include <iostream>
 
 using namespace std;
@@ -29,6 +30,7 @@ private:
 public:
 	Matrix(int num_rows, int num_cols);
 	Matrix(const Matrix& other);
+	Matrix(const Vector& other);
 	Matrix& operator=(const Matrix &other);
 	Matrix& operator=(const double constant);
 	Matrix& operator+=(const Matrix &other);
@@ -47,6 +49,14 @@ public:
 	bool operator!=(const Matrix &other) const;
 	~Matrix();
 	Row operator[](const int row);
+	const Matrix T() const;
+	Matrix& operator*=(const Matrix &other);
+	const Matrix operator*(const Matrix &other) const;
+	Matrix& operator=(const Vector &other);
+	const Matrix operator*(const Vector &other) const;
+	const int getNumRows() const;
+	const int getNumCols() const;
+
 	friend ostream& operator<<(ostream& os, const Matrix& matrix);
 
 	static const Matrix I(int num_rows, int num_cols);

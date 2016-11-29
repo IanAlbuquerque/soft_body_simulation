@@ -1,3 +1,4 @@
+#include "Vector.h"
 #include "Matrix.h"
 #include <stdexcept>
 #include <iostream>
@@ -42,7 +43,7 @@ Matrix& Matrix::operator=(const Matrix &other)
 		return *this;
 	}
 
-	if(this->num_rows != other.num_cols || this->num_cols != other.num_cols)
+	if(this->num_rows != other.num_rows || this->num_cols != other.num_cols)
 	{
 		throw std::runtime_error("DIMENSOES DIFERENTES");	
 	}
@@ -73,7 +74,7 @@ Matrix& Matrix::operator=(const double constant)
 
 Matrix& Matrix::operator+=(const Matrix &other)
 {
-	if(this->num_rows != other.num_cols || this->num_cols != other.num_cols)
+	if(this->num_rows != other.num_rows || this->num_cols != other.num_cols)
 	{
 		throw std::runtime_error("DIMENSOES DIFERENTES");	
 	}
@@ -117,7 +118,7 @@ Matrix& Matrix::operator-=(const double constant)
 
 Matrix& Matrix::operator-=(const Matrix &other)
 {
-	if(this->num_rows != other.num_cols || this->num_cols != other.num_cols)
+	if(this->num_rows != other.num_rows || this->num_cols != other.num_cols)
 	{
 		throw std::runtime_error("DIMENSOES DIFERENTES");	
 	}
@@ -205,7 +206,7 @@ const Matrix Matrix::operator/(const double constant) const
 
 bool Matrix::operator==(const Matrix &other) const
 {
-	if(this->num_rows != other.num_cols || this->num_cols != other.num_cols)
+	if(this->num_rows != other.num_rows || this->num_cols != other.num_cols)
 	{
 		throw std::runtime_error("DIMENSOES DIFERENTES");	
 	}
@@ -311,4 +312,97 @@ const Matrix Matrix::I(int num_rows, int num_cols)
 		}
 	}
 	return I;
+}
+
+const Matrix Matrix::T() const
+{
+	Matrix T(this->num_cols, this->num_rows);
+	for(int i=0; i<T.num_rows; i++)
+	{
+		for(int j=0; j<T.num_cols; j++)
+		{
+			T[i][j] = this->M[j][i];
+		}
+	}
+	return T;	
+}
+
+Matrix& Matrix::operator*=(const Matrix &other)
+{
+	(*this) = (*this) * other;
+	return *this;
+}
+
+const Matrix Matrix::operator*(const Matrix &other) const 
+{
+	if(this->num_cols != other.num_rows)
+	{
+		throw std::runtime_error("DIMENSOES DIFERENTES");	
+	}
+
+	Matrix result(this->num_rows, other.num_cols);
+
+	for(int i=0; i<this->num_rows; i++)
+	{
+		for(int j=0; j<other.num_cols; j++)
+		{
+			result[i][j] = 0.0;
+			for(int k=0; k<this->num_cols; k++)
+			{
+				result[i][j] += this->M[i][k] * other.M[k][j];
+			}
+		}
+	}
+
+	return result;
+}
+
+
+Matrix::Matrix(const Vector& other)
+{
+	this->num_rows = other.getDimension();
+	this->num_cols = 1.0;
+
+	this->M = new double*[this->num_rows];
+	for(int i=0; i<this->num_rows; i++)
+	{
+		this->M[i] = new double[this->num_cols];
+	}
+
+	for(int i=0; i<this->num_rows; i++)
+	{
+		this->M[i][0] = other[i];
+	}
+}
+
+Matrix& Matrix::operator=(const Vector &other)
+{
+	if(this->num_rows != other.getDimension())
+	{
+		throw std::runtime_error("DIMENSOES DIFERENTES");	
+	}
+
+	for(int i=0; i<this->num_rows; i++)
+	{
+		this->M[i][0] = other[i];
+	}
+
+	return *this;
+}
+
+const Matrix Matrix::operator*(const Vector &other) const 
+{
+	Matrix V = other;
+	return (*this) * V;
+}
+
+
+const int Matrix::getNumRows() const
+{
+	return this->num_rows;
+}
+
+const int Matrix::getNumCols() const
+{
+	return this->num_cols;
 }

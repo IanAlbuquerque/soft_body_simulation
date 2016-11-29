@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Matrix.h"
+#include "Vector.h"
 
 using namespace std;
 
@@ -88,6 +89,42 @@ int main(int argc, char** argv)
 	cout << "----" << endl;
 	Matrix J = Matrix::I(5,5);
 	cout << J;
+
+	cout << "----" << endl;
+
+	Matrix K(3,3);
+	K[0][0] = 1.0;
+	K[0][1] = 2.0;
+	K[0][2] = 3.0;
+	K[1][0] = 4.0;
+	K[1][1] = 5.0;
+	K[1][2] = 6.0;
+	K[2][0] = 7.0;
+	K[2][1] = 8.0;
+	K[2][2] = 9.0;
+	cout << K;
+	cout << K.T();
+
+	cout << "----" << endl;
+
+	Matrix I3 = Matrix::I(3,3);
+
+	cout << K;
+	cout << I3;
+	cout << K * I3;
+	cout << E * E;
+
+	Matrix L = Matrix::I(2,3);
+	Matrix M = Matrix::I(3,5);
+	cout << L * M;
+
+	cout << "----" << endl;
+
+	Vector v(2);
+	v[0] = 10;
+	v[1] = 0.1;
+
+	cout << E * v;
 
 	return 0;
 }
