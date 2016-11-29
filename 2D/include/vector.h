@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <iostream>
 
 using namespace std;
@@ -49,3 +52,5 @@ const Vector operator-(int constant, const Vector& v); //T
 const Vector operator*(double constant, const Vector& v); //T
 const Vector operator*(float constant, const Vector& v); //T
 const Vector operator*(int constant, const Vector& v); //T
+
+#endif
