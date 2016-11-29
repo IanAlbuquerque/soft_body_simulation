@@ -84,4 +84,6 @@ int main(int argc, char** argv)
 	cout << H;
 	H = 5 + H;
 	cout << H;
+
+	return 0;
 }

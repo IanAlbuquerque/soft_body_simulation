@@ -246,7 +246,8 @@ ostream& operator<<(ostream& os, const Matrix& matrix)
 			os << matrix.M[i][j] << " ";
 		}
 		os << endl;
-	}	
+	}
+	return os;	
 }
 
 Matrix::Row Matrix::operator[](const int row)
