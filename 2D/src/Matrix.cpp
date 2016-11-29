@@ -357,43 +357,27 @@ const Matrix Matrix::operator*(const Matrix &other) const
 	return result;
 }
 
-
-Matrix::Matrix(const Vector& other)
+const Vector Matrix::operator*(const Vector &other) const 
 {
-	this->num_rows = other.getDimension();
-	this->num_cols = 1.0;
+	int dimension = other.getDimension();
 
-	this->M = new double*[this->num_rows];
-	for(int i=0; i<this->num_rows; i++)
-	{
-		this->M[i] = new double[this->num_cols];
-	}
-
-	for(int i=0; i<this->num_rows; i++)
-	{
-		this->M[i][0] = other[i];
-	}
-}
-
-Matrix& Matrix::operator=(const Vector &other)
-{
-	if(this->num_rows != other.getDimension())
+	if(this->num_cols != dimension)
 	{
 		throw std::runtime_error("DIMENSOES DIFERENTES");	
 	}
 
+	Vector result(this->num_rows);
+
 	for(int i=0; i<this->num_rows; i++)
 	{
-		this->M[i][0] = other[i];
+		result[i] = 0.0;
+		for(int j=0; j<dimension; j++)
+		{
+			result[i] += this->M[i][j] * other[j];
+		}
 	}
 
-	return *this;
-}
-
-const Matrix Matrix::operator*(const Vector &other) const 
-{
-	Matrix V = other;
-	return (*this) * V;
+	return result;
 }
 
 

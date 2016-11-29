@@ -30,7 +30,6 @@ private:
 public:
 	Matrix(int num_rows, int num_cols);
 	Matrix(const Matrix& other);
-	Matrix(const Vector& other);
 	Matrix& operator=(const Matrix &other);
 	Matrix& operator=(const double constant);
 	Matrix& operator+=(const Matrix &other);
@@ -52,8 +51,7 @@ public:
 	const Matrix T() const;
 	Matrix& operator*=(const Matrix &other);
 	const Matrix operator*(const Matrix &other) const;
-	Matrix& operator=(const Vector &other);
-	const Matrix operator*(const Vector &other) const;
+	const Vector operator*(const Vector &other) const;
 	const int getNumRows() const;
 	const int getNumCols() const;
 
