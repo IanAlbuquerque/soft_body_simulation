@@ -298,4 +298,17 @@ const Matrix operator-(float constant, const Matrix& matrix)
 const Matrix operator-(double constant, const Matrix& matrix)  
 {  
     return (-1)*matrix+constant;  
-}        
+}
+
+const Matrix Matrix::I(int num_rows, int num_cols)
+{
+	Matrix I(num_rows, num_cols);
+	for(int i=0; i<num_rows; i++)
+	{
+		for(int j=0; j<num_cols; j++)
+		{
+			I[i][j] = i==j?1.0:0.0;
+		}
+	}
+	return I;
+}

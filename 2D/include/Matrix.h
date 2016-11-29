@@ -48,6 +48,8 @@ public:
 	~Matrix();
 	Row operator[](const int row);
 	friend ostream& operator<<(ostream& os, const Matrix& matrix);
+
+	static const Matrix I(int num_rows, int num_cols);
 };
 
 

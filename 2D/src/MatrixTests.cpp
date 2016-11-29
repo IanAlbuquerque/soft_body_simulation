@@ -85,5 +85,9 @@ int main(int argc, char** argv)
 	H = 5 + H;
 	cout << H;
 
+	cout << "----" << endl;
+	Matrix J = Matrix::I(5,5);
+	cout << J;
+
 	return 0;
 }
