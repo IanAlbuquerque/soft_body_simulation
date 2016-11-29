@@ -1,5 +1,6 @@
 #include "Vector.h"
 #include <iostream>
+#include <stdexcept>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ int main()
 	Vector v1(n);
 	Vector v2(n);
 	Vector v3(n);
+	Vector vz(n);
 	Vector v5(n+1);
 
 	for (int i = 0; i < n; i++)
@@ -33,6 +35,10 @@ int main()
 	cout << "= operator test" << endl;
 	v3 = v1;
 	cout << "V3 = V1" << endl << v3 << endl << endl;
+
+	cout << "= operator test (constant)" << endl;
+	vz = 0;
+	cout << "Vz = 0" << endl << vz << endl << endl;
 
 	cout << "+= operator test" << endl;
 	v1 += v2;

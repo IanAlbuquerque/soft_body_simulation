@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "Vector.h"
 #include <stdexcept>
 
 using namespace std;
@@ -45,6 +45,16 @@ Vector& Vector::operator=(const Vector &rhs)
 		{
 			this->elements[i] = rhs.elements[i];
 		}
+	}
+
+	return *this;
+}
+
+Vector & Vector::operator=(const double rhs)
+{
+	for (int i = 0; i < this->size; i++)
+	{
+		this->elements[i] = rhs;
 	}
 
 	return *this;

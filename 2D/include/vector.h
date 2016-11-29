@@ -13,6 +13,7 @@ class Vector
 		~Vector();
 		//Same class operations
 		Vector & operator=(const Vector &rhs); //T
+		Vector & operator=(const double rhs); //T
 		Vector & operator+=(const Vector &rhs); //T
 		Vector & operator-=(const Vector &rhs); //T
 		const Vector operator+(const Vector &other) const; //T
