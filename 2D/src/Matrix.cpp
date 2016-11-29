@@ -1,10 +1,13 @@
 #include "Matrix"
 #include <stdexcept>
+#include <iostream>
+
+using namespace std;
 
 Matrix::Matrix(int num_rows, int num_cols)
 {
 	this->M = new double*[num_rows];
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
 		this->M[i] = new double[num_cols];
 	}
@@ -13,14 +16,14 @@ Matrix::Matrix(int num_rows, int num_cols)
 Matrix::Matrix(const Matrix& other)
 {
 	this->M = new double*[num_rows];
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
 		this->M[i] = new double[num_cols];
 	}
 
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			this->M[i][j] = other.M[i][j];
 		}
@@ -39,9 +42,9 @@ Matrix& Matrix::operator=(const Matrix &other)
 		throw std::runtime_error('DIMENSOES DIFERENTES');	
 	}
 
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			this->M[i][j] = other.M[i][j];
 		}
@@ -57,9 +60,9 @@ Matrix& Matrix::operator+=(const Matrix &other)
 		throw std::runtime_error('DIMENSOES DIFERENTES');	
 	}
 
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			this->M[i][j] += other.M[i][j];
 		}
@@ -75,9 +78,9 @@ Matrix& Matrix::operator-=(const Matrix &other)
 		throw std::runtime_error('DIMENSOES DIFERENTES');	
 	}
 
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			this->M[i][j] -= other.M[i][j];
 		}
@@ -89,9 +92,9 @@ Matrix& Matrix::operator-=(const Matrix &other)
 
 Matrix& Matrix::operator*=(const double constant)
 {
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			this->M[i][j] *= constant;
 		}
@@ -103,9 +106,9 @@ Matrix& Matrix::operator*=(const double constant)
 
 Matrix& Matrix::operator*=(const double constant)
 {
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			this->M[i][j] /= constant;
 		}
@@ -149,9 +152,9 @@ bool Matrix::operator==(const Matrix &other) const
 		throw std::runtime_error('DIMENSOES DIFERENTES');	
 	}
 
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
-		for(int j=0; j<num_rows; j++)
+		for(int j=0; j<this->num_rows; j++)
 		{
 			if(this->M[i][j] != other.M[i][j])
 			{
@@ -169,7 +172,7 @@ bool Matrix::operator!=(const Matrix &other) const
 
 Matrix::~Matrix()
 {
-	for(int i=0; i<num_rows; i++)
+	for(int i=0; i<this->num_rows; i++)
 	{
 		delete this->M[i];
 	}
@@ -184,4 +187,16 @@ const Row& operator[](const int row) const
 Row& operator[](const int row)
 {
 	return Row(*this, row);
+}
+
+ostream& operator<<(ostream& os, const Matrix& matrix)
+{
+	for(int i=0; i<matrix.num_rows; i++)
+	{
+		for(int j=0; j<matrix.num_rows; j++)
+		{
+			os << matrix.M[i][j] << " ";
+		}
+		os << endl;
+	}	
 }

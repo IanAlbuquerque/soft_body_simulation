@@ -1,6 +1,10 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <iostream>
+
+using namespace std;
+
 class Matrix
 {
 private:
@@ -42,6 +46,7 @@ public:
 	Matrix::~Matrix();
 	const Row& operator[](const int row) const;
 	Row& operator[](const int row);
+	friend ostream& operator<<(ostream& os, const Matrix& matrix); 
 };
 
 #endif
