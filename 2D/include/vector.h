@@ -33,6 +33,8 @@ class Vector
 		double& operator[](const int index); //T
 		//Other functions
 		const int getDimension() const; //T
+		const double dot(const Vector& v) const; //T
+		const double norm() const; //T
 		friend ostream& operator<<(ostream& os, const Vector& other); //T
 };
 

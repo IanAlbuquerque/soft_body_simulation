@@ -1,5 +1,6 @@
 #include "Vector.h"
 #include <stdexcept>
+#include <math.h>
 
 using namespace std;
 
@@ -247,6 +248,28 @@ double& Vector::operator[](const int index)
 const int Vector::getDimension() const
 {
 	return this->size;
+}
+
+const double Vector::dot(const Vector& v) const
+{
+
+	if(this->size != v.size) {
+		throw std::runtime_error("DIMENSOES DIFERENTES");
+	}
+
+	double sum = 0;
+
+	for (int i = 0; i < this->size; i++)
+	{
+		sum += this->elements[i] * v.elements[i];
+	}
+
+	return sum;
+}
+
+const double Vector::norm() const
+{
+	return sqrt(this->dot(*this));
 }
 
 ostream& operator<<(ostream& os, const Vector& other)
