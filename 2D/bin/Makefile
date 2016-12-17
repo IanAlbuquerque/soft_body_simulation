@@ -7,3 +7,6 @@ tests:
 
 vis:
 	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp -I../include -L../lib -lm -lglut32 -lopengl32 -lglu32
+
+macvis:
+	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp -I../include -L../lib -lm -framework GLUT -framework OpenGL -framework Cocoa
