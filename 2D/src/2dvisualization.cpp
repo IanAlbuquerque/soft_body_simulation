@@ -80,25 +80,11 @@ void display()
 			two_pos = getPosition(nodes, nodes[i].neighbours[j]);
 
 			glBegin(GL_LINES);
-			glVertex2d(one_pos[0], one_pos[1]);
-			glVertex2d(two_pos[0], two_pos[1]);
+			glVertex2f(one_pos[0], one_pos[1]);
+			glVertex2f(two_pos[0], two_pos[1]);
 			glEnd();
 		}
 	}
-
-	// glBegin(GL_POLYGON);
-	// glVertex2f(-0.5, -0.5);
-	// glVertex2f(-0.5,  0.5);
-	// glVertex2f(0.5,  0.5);
-	// glVertex2f(0.5, -0.5);
-	// glEnd();
-
-	// Vector dir(2);
-	// dir[0] = cos(current_time);
-	// dir[1] = sin(current_time);
-	// center = center_rotation + 1.0*dir;
-
-	// drawCircle(center, 0.1, color, 100);
 
 	glFlush();
 
@@ -112,7 +98,7 @@ void init()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(-2.0, 2.0, -2.0, 2.0);
+	gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
 
 	last_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
 
@@ -138,7 +124,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(640, 640);
 	glutInitWindowPosition(0, 0);
-	glutCreateWindow("Test");
+	glutCreateWindow("Simulation");
 	glutDisplayFunc(display);
 	init();
 	glutMainLoop();

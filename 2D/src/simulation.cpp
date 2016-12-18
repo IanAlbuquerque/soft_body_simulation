@@ -19,7 +19,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	(*velocity1)[1] = 0.5;
 
 	int *n1 = new int[1];
-	n1[0] = 0;
+	n1[0] = 1;
 
 	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
 	list[0] = one;
@@ -33,7 +33,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	(*velocity2)[1] = 0.5;
 
 	int *n2 = new int[1];
-	n2[0] = 1;
+	n2[0] = 0;
 
 	Vertex two = { .node = 1, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
 	list[1] = two;
