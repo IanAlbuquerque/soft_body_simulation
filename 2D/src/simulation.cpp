@@ -26,7 +26,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	Vector* velocity;
 	int v1;
 	int v2;
-	int k;
+	double k;
 	double dist;
 
 	input_file = fopen(file_name, "r");
@@ -48,15 +48,15 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 
 	for(int i=0; i<num_vertices_read; i++)
 	{
-		if(fscanf(input_file, " pos= %g %g", &pos_x, &pos_y) != 2)
+		if(fscanf(input_file, " pos= %lf %lf", &pos_x, &pos_y) != 2)
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO pos= x y");
 		}
-		if(fscanf(input_file, " vel= %g %g", &vel_x, &vel_y) != 2)
+		if(fscanf(input_file, " vel= %lf %lf", &vel_x, &vel_y) != 2)
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO vel= x y");
 		}
-		if(fscanf(input_file, " mass= %g", &mass) != 1)
+		if(fscanf(input_file, " mass= %lf", &mass) != 1)
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO mass= m");
 		}
@@ -94,7 +94,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO ver= v1 v2");
 		}
-		if(fscanf(input_file, " k= %g", &k) != 1)
+		if(fscanf(input_file, " k= %lf", &k) != 1)
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO k= k");
 		}
