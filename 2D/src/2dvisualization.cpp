@@ -132,7 +132,7 @@ void init()
 
 int main(int argc, char** argv) 
 {
-	initVertices(&nodes, &num_vertex, "../in/test_01.sim");
+	initVertices(&nodes, &num_vertex, "../in/test_02.sim");
 	printVertices(nodes, num_vertex);
 
 	glutInit(&argc, argv);
