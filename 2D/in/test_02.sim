@@ -16,7 +16,7 @@ num_neig= 1
 fix= 1
 
 pos= -0.5 2.5
-vel= -5000.0 0.0
+vel= -5.0 0.0
 mass= 10
 num_neig= 1
 fix= 0
