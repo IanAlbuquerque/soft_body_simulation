@@ -20,12 +20,6 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	(*velocity1)[0] = 0.5;
 	(*velocity1)[1] = 0.5;
 
-	int *n1 = new int[1];
-	n1[0] = 1;
-
-	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
-	list[0] = one;
-
 	Vector *position2 = new Vector(2);
 	(*position2)[0] = 1.0;
 	(*position2)[1] = -0.5;
@@ -34,10 +28,22 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	(*velocity2)[0] = 0.5;
 	(*velocity2)[1] = 0.5;
 
+	int *n1 = new int[1];
+	n1[0] = 1;
+
+	double *c1 = new double[1];
+	c1[0] = 1;
+
+	double *d = new double[1];
+	d[0] = (*position1 - *position2).norm();
+
+	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
+	list[0] = one;
+
 	int *n2 = new int[1];
 	n2[0] = 0;
 
-	Vertex two = { .node = 1, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
+	Vertex two = { .node = 1, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
 	list[1] = two;
 
 	*list_of_vertices = list;
