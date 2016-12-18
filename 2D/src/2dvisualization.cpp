@@ -69,7 +69,7 @@ void display()
 
 /*	printVertices(nodes, num_vertex);
 	printf("\n");*/
-	simulate(nodes, num_vertex, elapsed_time);
+	simulate(nodes, num_vertex, elapsed_time, g, h);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -138,18 +138,24 @@ int main(int argc, char** argv)
 {
 	if (argc != 2) 
     {
-    	printf("Wrong variables number\n");
+    	printf("Usage:\n");
+    	printf("<program_name> <name_of_the_file_without_path>\n");
+    	printf("\n");
+    	printf("Example:\n");
+    	printf("<program_name> test will open ../in/test.sim\n");
+    	printf("This line will open ../in/test.sim\n");
         exit(1);
     }
 
-    char *path = (char*)malloc(1024*sizeof(char));
+    char *path = new char[1024];
     strcpy(path, "../in/");
     strcat(path, argv[1]);
     strcat(path, ".sim");
     printf("Path: %s\n", path);
 
-	initVertices(&nodes, &num_vertex, path);
-	printVertices(nodes, num_vertex);
+	initVertices(&nodes, &num_vertex, path, &g, &h);
+
+	delete path;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

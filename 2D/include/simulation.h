@@ -17,9 +17,9 @@ struct _Vertex {
 
 typedef struct _Vertex Vertex;
 
-void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, float* gravity, float* step);
+void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, double* gravity, double* step);
 
-void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate);
+void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step);
 
 void printVertices(Vertex* list_of_vertices, int num_vertices);
 

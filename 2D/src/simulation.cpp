@@ -2,14 +2,7 @@
 #include "simulation.h"
 #include <stdexcept>
 
-#define GRAVITY_CTE 10.00
-
-void f()
-{
-	printf("f was called\n");
-}
-
-void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, float* gravity, float* step)
+void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, double* gravity, double* step)
 {
 	FILE* input_file;
 	int num_vertices_read;
@@ -214,7 +207,7 @@ void derivative(	Vector position,
 	*d_velocity = force / (double) v.mass;
 }
 
-void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate)
+void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step)
 {
 	Vector** new_positions = new Vector*[num_vertices];
 	Vector** new_velocities = new Vector*[num_vertices];
@@ -252,7 +245,7 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					&d_velocity,
 					i,
 					list_of_vertices,
-					GRAVITY_CTE);
+					gravity);
 
 		position = *(list_of_vertices[i].position) + h*d_position;
 		velocity = *(list_of_vertices[i].velocity) + h*d_velocity;
@@ -268,7 +261,7 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					&d_velocity,
 					i,
 					list_of_vertices,
-					GRAVITY_CTE);
+					gravity);
 
 		position = *(list_of_vertices[i].position) + h/2.0*d_position;
 		velocity = *(list_of_vertices[i].velocity) + h/2.0*d_velocity;
@@ -284,7 +277,7 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					&d_velocity,
 					i,
 					list_of_vertices,
-					GRAVITY_CTE);
+					gravity);
 
 
 		position = *(list_of_vertices[i].position) + h/2.0*d_position;
@@ -301,7 +294,7 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					&d_velocity,
 					i,
 					list_of_vertices,
-					GRAVITY_CTE);
+					gravity);
 		position = *(list_of_vertices[i].position) + h*d_position;
 		velocity = *(list_of_vertices[i].velocity) + h*d_velocity;
 
