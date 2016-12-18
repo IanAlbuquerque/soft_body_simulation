@@ -9,7 +9,7 @@ void f()
 	printf("f was called\n");
 }
 
-void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name)
+void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, float* gravity, float* step)
 {
 	FILE* input_file;
 	int num_vertices_read;
@@ -28,6 +28,8 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	int v2;
 	double k;
 	double dist;
+	double g;
+	double h;
 
 	input_file = fopen(file_name, "r");
 	if(input_file == NULL)
@@ -35,6 +37,14 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		throw std::runtime_error("ARQUIVO DE ENTRADA INEXISTENTE");
 	}
 
+	if(fscanf(input_file, " h= %lf", &h) != 1)
+	{
+		throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO h= step");
+	}
+	if(fscanf(input_file, " g= %lf", &g) != 1)
+	{
+		throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO g= gravity");
+	}
 	if(fscanf(input_file, " num_v= %d", &num_vertices_read) != 1)
 	{
 		throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO num_v= |V|");
@@ -117,6 +127,8 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 
 	*list_of_vertices = list;
 	*num_vertices = num_vertices_read;
+	*gravity = g;
+	*step = h;
 
 /*	Vertex *list = new Vertex[2];
 

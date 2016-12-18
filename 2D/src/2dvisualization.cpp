@@ -57,6 +57,9 @@ Vector center_rotation(2);
 Vertex *nodes;
 int num_vertex;
 
+double g;
+double h;
+
 void display() 
 {
 	double current_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
