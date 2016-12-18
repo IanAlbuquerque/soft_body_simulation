@@ -6,7 +6,7 @@ tests:
 	g++ -o TEST_Matrix ../src/MatrixTests.cpp ../src/Matrix.cpp ../src/Vector.cpp -I../include -lm
 
 windowsvis:
-	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp -I../include -L../lib -lm -lglut32 -lopengl32 -lglu32
+	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp ../src/simulation.cpp -I../include -L../lib -lm -lglut32 -lopengl32 -lglu32
 
 macvis:
 	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp ../src/simulation.cpp -I../include -L../lib -Wall -Wno-deprecated -lm -framework GLUT -framework OpenGL -framework Cocoa

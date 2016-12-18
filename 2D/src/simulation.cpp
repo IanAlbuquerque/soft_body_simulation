@@ -52,23 +52,33 @@ Vector getPosition(Vertex* list_of_vertex, int num_vertex)
 	return *(list_of_vertex[num_vertex].position);
 }
 
-// void derivative(	Vector& d_position
-// 					Vector& d_velocity,
-// 					int vertex_index,
-// 					Vertex* list_of_vertices,
-// 					int* num_vertices,
-// 					double gravity)
-// {
-// 	Vector force(2);
-// 	Vertex v = list_of_vertices[vertex_index];
-// 	Vector d;
-// 	double d_norm;
-// 	int neighbour_index;
-// 	Vertex neighbour;
+void printVertices(Vertex* list_of_vertices, int num_vertices)
+{
+	for(int i=0; i<num_vertices; i++)
+	{
+		cout << *(list_of_vertices[i].position);
+	}
+}
+/*
+void derivative(	Vector& d_position
+					Vector& d_velocity,
+					int vertex_index,
+					Vertex* list_of_vertices,
+					int* num_vertices,
+					double gravity)
+{
+	Vector force(2);
+	Vertex v = list_of_vertices[vertex_index];
+	Vector d;
+	double d_norm;
+	int neighbour_index;
+	Vertex neighbour;
+>>>>>>> c4650decdbdb26eee97e692afeab403914ec3589
 
 // 	force[0] = 0;
 // 	force[1] = gravity;
 
+<<<<<<< HEAD
 // 	for(int i=0; i<v->num_neighbours; i++)
 // 	{
 // 		neighbour_index = v->neighbours[i];
@@ -80,3 +90,16 @@ Vector getPosition(Vertex* list_of_vertex, int num_vertex)
 // 	d_position = v->velocity;
 // 	d_velocity = force / v->mass;
 // }
+=======
+	for(int i=0; i<v->num_neighbours; i++)
+	{
+		neighbour_index = v->neighbours[i];
+		neighbour = list_of_vertices[neighbour_index];
+		d = neighbour->position - v->position;
+		d_norm = d.norm();
+		force += -v->coeff_k[i] * ( d - v->rest_r[i]) * d / d_norm;
+	}
+
+	d_position = v->velocity;
+	d_velocity = force / v->mass;
+}*/
