@@ -3,6 +3,17 @@
 
 #include "Vector.h"
 
+struct _Vertex {
+	int node;
+	double mass;
+	Vector *position;
+	Vector *velocity;
+	int *neighbours;
+	double *coeff_k;
+	double *rest_r;
+	int num_neighbours;
+};
+
 typedef struct _Vertex Vertex;
 
 void initVertices(Vertex** list_of_vertices, int* num_vertices, char* file_name);

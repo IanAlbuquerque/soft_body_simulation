@@ -6,17 +6,6 @@ void f()
 	printf("f was called\n");
 }
 
-struct _Vertex {
-	int node;
-	double mass;
-	Vector *position;
-	Vector *velocity;
-	int *neighbours;
-	double *coeff_k;
-	double *rest_r;
-	int num_neighbours;
-};
-
 void initVertices(Vertex** list_of_vertices, int* num_vertices, char* file_name)
 {
 	Vertex *list = new Vertex[2];
@@ -29,7 +18,10 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, char* file_name)
 	(*velocity1)[0] = 0.5;
 	(*velocity1)[1] = 0.5;
 
-	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 0 };
+	int *n1 = new int[1];
+	n1[0] = 0;
+
+	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
 	list[0] = one;
 
 	Vector *position2 = new Vector(2);
@@ -40,7 +32,10 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, char* file_name)
 	(*velocity2)[0] = 0.5;
 	(*velocity2)[1] = 0.5;
 
-	Vertex two = { .node = 0, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 0 };
+	int *n2 = new int[1];
+	n2[0] = 1;
+
+	Vertex two = { .node = 1, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
 	list[1] = two;
 
 	*list_of_vertices = list;
