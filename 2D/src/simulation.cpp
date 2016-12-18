@@ -115,6 +115,9 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 
 	fclose(input_file);
 
+	*list_of_vertices = list;
+	*num_vertices = num_vertices_read;
+
 /*	Vertex *list = new Vertex[2];
 
 	Vector *position1 = new Vector(2);
