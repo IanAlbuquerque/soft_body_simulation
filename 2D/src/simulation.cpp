@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simulation.h"
 
-#define GRAVITY_CTE 10.0
+#define GRAVITY_CTE 0.05
 
 void f()
 {
