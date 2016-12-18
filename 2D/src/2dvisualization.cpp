@@ -63,14 +63,6 @@ double h;
 
 void display() 
 {
-	double current_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
-	double elapsed_time = current_time - last_time;
-	last_time = current_time;
-
-/*	printVertices(nodes, num_vertex);
-	printf("\n");*/
-	simulate(nodes, num_vertex, elapsed_time, g, h);
-
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glColor3f(0.0, 0.0, 0.0); // JMU Purple
@@ -104,8 +96,8 @@ void display()
 
 	glFlush();
 
-	glutSwapBuffers();
 	glutPostRedisplay();
+	glutSwapBuffers();
 }
 
 void init() 
@@ -132,6 +124,21 @@ void init()
 	color_fixed[2] = 1.0;
 	center_rotation[0] = 0.0;
 	center_rotation[1] = 0.0;
+}
+
+void update(void)
+{
+	double current_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
+	double elapsed_time = current_time - last_time;
+	last_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
+
+	simulate(nodes, num_vertex, elapsed_time, g, h);
+}
+
+void mouse(int button, int state, int x, int y)
+{
+	glutPostRedisplay();
+    return;
 }
 
 int main(int argc, char** argv) 
@@ -163,6 +170,8 @@ int main(int argc, char** argv)
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("Simulation");
 	glutDisplayFunc(display);
+    glutIdleFunc (update);
+	glutMouseFunc(mouse);
 	init();
 	glutMainLoop();
 }
