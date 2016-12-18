@@ -313,6 +313,6 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 		list_of_vertices[i].velocity = new_velocities[i];
 	}
 
-	delete new_positions;
-	delete new_velocities;
+	delete[] new_positions;
+	delete[] new_velocities;
 }
