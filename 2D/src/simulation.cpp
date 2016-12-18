@@ -63,7 +63,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO mass= m");
 		}
-		if(fscanf(input_file, " num_neig= %d", &int_fix) != 1)
+		if(fscanf(input_file, " num_neig= %d", &num_neig) != 1)
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO num_neig= n");
 		}

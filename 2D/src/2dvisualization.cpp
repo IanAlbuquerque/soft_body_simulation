@@ -142,7 +142,7 @@ int main(int argc, char** argv)
     	printf("<program_name> <name_of_the_file_without_path>\n");
     	printf("\n");
     	printf("Example:\n");
-    	printf("<program_name> test will open ../in/test.sim\n");
+    	printf("<program_name> test\n");
     	printf("This line will open ../in/test.sim\n");
         exit(1);
     }
