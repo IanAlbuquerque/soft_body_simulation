@@ -187,7 +187,7 @@ void derivative(	Vector position,
 	Vertex neighbour;
 
 	force[0] = 0;
- 	force[1] = -gravity;
+ 	force[1] = -gravity*v.mass;
 
 	for(int i=0; i<v.num_neighbours; i++)
 	{
