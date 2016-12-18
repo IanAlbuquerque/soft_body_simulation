@@ -11,6 +11,7 @@ struct _Vertex {
 	int node;
 	double mass;
 	Vector position;
+	Vector velocity;
 	int *neighbours;
 	double *coeff_k;
 	double *rest_r;
