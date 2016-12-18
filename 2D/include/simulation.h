@@ -5,7 +5,7 @@
 
 typedef struct _Vertex Vertex;
 
-void initVertices(Vertex* list_of_vertices, int* num_vertices, char* file_name);
+void initVertices(Vertex** list_of_vertices, int* num_vertices, char* file_name);
 
 void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate);
 
