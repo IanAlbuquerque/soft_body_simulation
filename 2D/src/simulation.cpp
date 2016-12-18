@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "simulation.h"
 #include <stdexcept>
+#include <float.h>
 
 void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, double* gravity, double* step)
 {
@@ -207,7 +208,7 @@ void derivative(	Vector position,
 	*d_velocity = force / (double) v.mass;
 }
 
-void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step)
+void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gravity)
 {
 	Vector** new_positions = new Vector*[num_vertices];
 	Vector** new_velocities = new Vector*[num_vertices];
@@ -216,8 +217,6 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 	Vector velocity(2);
 	Vector d_position(2);
 	Vector d_velocity(2);
-
-	double h = (double) time_to_simulate;
 
 	for(int i=0; i<num_vertices; i++)
 	{
@@ -314,5 +313,38 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 	}
 
 	delete[] new_positions;
-	delete[] new_velocities;
+	delete[] new_velocities;	
+}
+
+void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step)
+{
+	double h;
+	int num_iterations;
+	double last_h;
+
+	if( step > time_to_simulate)
+	{
+		h = (double) time_to_simulate;
+		num_iterations = 1;
+		last_h = 0.0;
+	}
+	else
+	{
+		h = step;
+		num_iterations = (int) (time_to_simulate / step);
+		last_h = time_to_simulate - num_iterations * step;
+	}
+
+	if(h > DBL_EPSILON)
+	{
+		for(int i=0; i<num_iterations; i++)
+		{
+			rungeKutta(list_of_vertices, num_vertices, h, gravity);
+		}
+		if(last_h > DBL_EPSILON)
+		{
+			printf("LAST");
+			rungeKutta(list_of_vertices, num_vertices, last_h, gravity);
+		}
+	}
 }
