@@ -72,7 +72,8 @@ void derivative(	Vector& d_position
 		neighbour_index = v->neighbours[i];
 		neighbour = list_of_vertices[neighbour_index];
 		d = neighbour->position - v->position;
-		force += -v->coeff_k[i] * ( - v->rest_r[i])
+		d_norm = d.norm();
+		force += -v->coeff_k[i] * ( d - v->rest_r[i]) * d / d_norm;
 	}
 
 	d_position = v->velocity;
