@@ -29,7 +29,8 @@ void initVertices(Vertex* list_of_vertices, int* num_vertices, char* file_name)
 	(*velocity1)[0] = 0.5;
 	(*velocity1)[1] = 0.5;
 
-	list[0] = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL };
+	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 0 };
+	list[0] = one;
 
 	Vector *position2 = new Vector(2);
 	(*position2)[0] = 1.0;
@@ -39,7 +40,8 @@ void initVertices(Vertex* list_of_vertices, int* num_vertices, char* file_name)
 	(*velocity2)[0] = 0.5;
 	(*velocity2)[1] = 0.5;
 
-	list[2] = { .node = 0, .mass = 0, .position = position, .velocity = velocity, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 1 };
+	Vertex two = { .node = 0, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL, .num_neighbours = 0 };
+	list[1] = two;
 
 	list_of_vertices = list;
 	*num_vertices = 2;
@@ -47,7 +49,11 @@ void initVertices(Vertex* list_of_vertices, int* num_vertices, char* file_name)
 
 Vector getPosition(Vertex* list_of_vertex, int num_vertex)
 {
-	return list_of_vertex[num_vertex]->position;
+	Vector pos(2);
+	pos[0] = 0;
+	pos[1] = 1;
+	return *list_of_vertex[num_vertex].position;
+	// return pos;
 }
 
 void derivative(	Vector& d_position
