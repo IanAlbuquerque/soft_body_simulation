@@ -51,6 +51,7 @@ Vector center(2);
 Vector one_pos(2);
 Vector two_pos(2);
 Vector color(3);
+Vector color_fixed(3);
 Vector center_rotation(2);
 
 Vertex *nodes;
@@ -73,7 +74,14 @@ void display()
 	for (int i = 0; i < num_vertex; i++)
 	{
 		center = getPosition(nodes, i);
-		drawCircle(center, 0.1, color, 100);
+		if(nodes[i].fixed)
+		{
+			drawCircle(center, 0.1, color_fixed, 100);
+		}
+		else
+		{
+			drawCircle(center, 0.1, color, 100);
+		}
 	}
 
 	for (int i = 0; i < num_vertex; i++)
@@ -115,6 +123,9 @@ void init()
 	color[0] = 1.0;
 	color[1] = 0.0;
 	color[2] = 1.0;
+	color_fixed[0] = 0.0;
+	color_fixed[1] = 0.0;
+	color_fixed[2] = 1.0;
 	center_rotation[0] = 0.0;
 	center_rotation[1] = 0.0;
 }

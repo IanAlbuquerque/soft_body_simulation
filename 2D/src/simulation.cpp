@@ -17,7 +17,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	(*position1)[1] = 0.5;
 
 	Vector *velocity1 = new Vector(2);
-	(*velocity1)[0] = 0.5;
+	(*velocity1)[0] = 1.0;
 	(*velocity1)[1] = 0.5;
 
 	Vector *position2 = new Vector(2);
@@ -37,13 +37,13 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	double *d = new double[1];
 	d[0] = (*position1 - *position2).norm();
 
-	Vertex one = { .node = 0, .mass = 1.0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
+	Vertex one = { .node = 0, .mass = 1.0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = c1, .rest_r = d, .num_neighbours = 1, .fixed = true };
 	list[0] = one;
 
 	int *n2 = new int[1];
 	n2[0] = 0;
 
-	Vertex two = { .node = 1, .mass = 1.0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
+	Vertex two = { .node = 1, .mass = 1.0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = c1, .rest_r = d, .num_neighbours = 1, .fixed = false  };
 	list[1] = two;
 
 	*list_of_vertices = list;
@@ -114,6 +114,13 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 		*(new_positions[i]) = 0;
 		*(new_velocities[i]) = 0;
 
+		if(list_of_vertices[i].fixed)
+		{
+			*(new_positions[i]) = *(list_of_vertices[i].position);
+			*(new_velocities[i]) = 0.0;
+			continue;
+		}
+
 		position = *(list_of_vertices[i].position);
 		velocity = *(list_of_vertices[i].velocity);
 
@@ -183,8 +190,6 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 
 		*(new_positions[i]) /= 6.0;
 		*(new_velocities[i]) /= 6.0;
-
-
 	}
 
 	for(int i=0; i<num_vertices; i++)

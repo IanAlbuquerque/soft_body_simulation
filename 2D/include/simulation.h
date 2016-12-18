@@ -12,6 +12,7 @@ struct _Vertex {
 	double *coeff_k;
 	double *rest_r;
 	int num_neighbours;
+	bool fixed;
 };
 
 typedef struct _Vertex Vertex;
