@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include "simulation.h"
+#include <stdexcept>
 
-#define GRAVITY_CTE 0.00
+#define GRAVITY_CTE 10.00
 
 void f()
 {
@@ -10,7 +11,111 @@ void f()
 
 void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name)
 {
-	Vertex *list = new Vertex[2];
+	FILE* input_file;
+	int num_vertices_read;
+	int num_edges_read;
+	double pos_x;
+	double pos_y;
+	double vel_x;
+	double vel_y;
+	double mass;
+	int num_neig;
+	int int_fix;
+	Vertex *list;
+	Vector* position;
+	Vector* velocity;
+	int v1;
+	int v2;
+	int k;
+	double dist;
+
+	input_file = fopen(file_name, "r");
+	if(input_file == NULL)
+	{
+		throw std::runtime_error("ARQUIVO DE ENTRADA INEXISTENTE");
+	}
+
+	if(fscanf(input_file, " num_v= %d", &num_vertices_read) != 1)
+	{
+		throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO num_v= |V|");
+	}
+	if(fscanf(input_file, " num_e= %d", &num_edges_read) != 1)
+	{
+		throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO num_e= |E|");
+	}
+
+	list = new Vertex[num_vertices_read];
+
+	for(int i=0; i<num_vertices_read; i++)
+	{
+		if(fscanf(input_file, " pos= %g %g", &pos_x, &pos_y) != 2)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO pos= x y");
+		}
+		if(fscanf(input_file, " vel= %g %g", &vel_x, &vel_y) != 2)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO vel= x y");
+		}
+		if(fscanf(input_file, " mass= %g", &mass) != 1)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO mass= m");
+		}
+		if(fscanf(input_file, " num_neig= %d", &int_fix) != 1)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO num_neig= n");
+		}
+		if(fscanf(input_file, " fix= %d", &int_fix) != 1)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO fix= <0 ou 1>");
+		}
+
+		position = new Vector(2);
+		(*position)[0] = pos_x;
+		(*position)[1] = pos_y;
+
+		velocity = new Vector(2);
+		(*velocity)[0] = vel_x;
+		(*velocity)[1] = vel_y;
+
+		list[i].position = position;
+		list[i].velocity = velocity;
+		list[i].mass = mass;
+		list[i].num_neighbours = 0;
+		list[i].fixed = (bool) int_fix;
+
+		list[i].neighbours = new int[num_neig];
+		list[i].coeff_k = new double[num_neig];
+		list[i].rest_r = new double[num_neig];
+	}
+
+	for(int i=0; i<num_edges_read; i++)
+	{
+		if(fscanf(input_file, " ver= %d %d", &v1, &v2) != 2)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO ver= v1 v2");
+		}
+		if(fscanf(input_file, " k= %g", &k) != 1)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO k= k");
+		}
+
+		list[v1].neighbours[list[v1].num_neighbours] = v2;
+		list[v2].neighbours[list[v2].num_neighbours] = v1;
+
+		list[v1].coeff_k[list[v1].num_neighbours] = k;
+		list[v2].coeff_k[list[v2].num_neighbours] = k;
+
+		dist = (*(list[v1].position) - *(list[v2].position)).norm();
+		list[v1].coeff_k[list[v1].num_neighbours] = dist;
+		list[v2].coeff_k[list[v2].num_neighbours] = dist;
+
+		list[v1].num_neighbours++;
+		list[v2].num_neighbours++;
+	}
+
+	fclose(input_file);
+
+/*	Vertex *list = new Vertex[2];
 
 	Vector *position1 = new Vector(2);
 	(*position1)[0] = 0.5;
@@ -32,7 +137,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	n1[0] = 1;
 
 	double *c1 = new double[1];
-	c1[0] = 1;
+	c1[0] = 10;
 
 	double *d = new double[1];
 	d[0] = (*position1 - *position2).norm();
@@ -47,7 +152,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	list[1] = two;
 
 	*list_of_vertices = list;
-	*num_vertices = 2;
+	*num_vertices = 2;*/
 }
 
 Vector getPosition(Vertex* list_of_vertex, int num_vertex)
@@ -79,7 +184,7 @@ void derivative(	Vector position,
 	Vertex neighbour;
 
 	force[0] = 0;
- 	force[1] = gravity;
+ 	force[1] = -gravity;
 
 	for(int i=0; i<v.num_neighbours; i++)
 	{

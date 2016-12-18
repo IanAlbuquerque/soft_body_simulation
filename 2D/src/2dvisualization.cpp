@@ -132,7 +132,7 @@ void init()
 
 int main(int argc, char** argv) 
 {
-	initVertices(&nodes, &num_vertex, "simulation1.txt");
+	initVertices(&nodes, &num_vertex, "../in/test_01.sim");
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

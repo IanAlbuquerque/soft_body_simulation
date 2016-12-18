@@ -2,9 +2,9 @@
 #define SIMULATION_H
 
 #include "Vector.h"
+#include <vector>
 
 struct _Vertex {
-	int node;
 	double mass;
 	Vector *position;
 	Vector *velocity;
