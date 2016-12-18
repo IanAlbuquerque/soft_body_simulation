@@ -74,21 +74,15 @@ void display()
 
 	for (int i = 0; i < num_vertex; i++)
 	{
-		printf("%d -> nb = %d\n", i, nodes[num_vertex].num_neighbours);
-		for (int j = 0; j < nodes[num_vertex].num_neighbours; j++)
+		for (int j = 0; j < nodes[i].num_neighbours; j++)
 		{
-			printf("Teste %d\n", j);
-			// int n = nodes[num_vertex].neighbours[j];
-			// one_pos = getPosition(nodes, num_vertex);
-			// two_pos = getPosition(nodes, n);
+			one_pos = getPosition(nodes, i);
+			two_pos = getPosition(nodes, nodes[i].neighbours[j]);
 
-			// cout << one_pos;
-			// cout << two_pos;
-
-			// glBegin(GL_LINES);
-			// glVertex2d(one_pos[0], one_pos[1]);
-			// glVertex2d(two_pos[0], two_pos[1]);
-			// glEnd();
+			glBegin(GL_LINES);
+			glVertex2d(one_pos[0], one_pos[1]);
+			glVertex2d(two_pos[0], two_pos[1]);
+			glEnd();
 		}
 	}
 
