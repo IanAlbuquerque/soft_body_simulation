@@ -106,8 +106,8 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		list[v2].coeff_k[list[v2].num_neighbours] = k;
 
 		dist = (*(list[v1].position) - *(list[v2].position)).norm();
-		list[v1].coeff_k[list[v1].num_neighbours] = dist;
-		list[v2].coeff_k[list[v2].num_neighbours] = dist;
+		list[v1].rest_r[list[v1].num_neighbours] = dist;
+		list[v2].rest_r[list[v2].num_neighbours] = dist;
 
 		list[v1].num_neighbours++;
 		list[v2].num_neighbours++;
