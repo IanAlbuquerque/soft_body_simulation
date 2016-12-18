@@ -12,4 +12,5 @@ typedef struct Vertex {
 	Vector position;
 	int *neighbours;
 	double *coeff_k;
+	double *rest_r;
 };
