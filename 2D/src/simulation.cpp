@@ -25,14 +25,14 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	(*position2)[1] = -0.5;
 
 	Vector *velocity2 = new Vector(2);
-	(*velocity2)[0] = 0.5;
+	(*velocity2)[0] = -0.5;
 	(*velocity2)[1] = 0.5;
 
 	int *n1 = new int[1];
 	n1[0] = 1;
 
 	double *c1 = new double[1];
-	c1[0] = 0;
+	c1[0] = 1;
 
 	double *d = new double[1];
 	d[0] = (*position1 - *position2).norm();
@@ -87,7 +87,7 @@ void derivative(	Vector position,
 		neighbour = list_of_vertices[neighbour_index];
 		d = *(neighbour.position) - position;
 		d_norm = d.norm();
-		force += -v.coeff_k[i] * ( d_norm - v.rest_r[i]) * d / d_norm;
+		force += v.coeff_k[i] * ( d_norm - v.rest_r[i]) * d / d_norm;
 	}
 
 	*d_position = velocity;
