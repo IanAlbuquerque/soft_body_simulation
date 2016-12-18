@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include "Vector.h"
+#include "simulation.h"
 #include <time.h>
 #include <stdio.h>
 
@@ -50,6 +51,9 @@ Vector center(2);
 Vector color(3);
 Vector center_rotation(2);
 
+Vertex *nodes;
+int num_vertex;
+
 void display() 
 {
 	double current_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
@@ -60,19 +64,25 @@ void display()
 
 	glColor3f(0.0, 0.0, 0.0); // JMU Purple
 
-	glBegin(GL_POLYGON);
-	glVertex2f(-0.5, -0.5);
-	glVertex2f(-0.5,  0.5);
-	glVertex2f(0.5,  0.5);
-	glVertex2f(0.5, -0.5);
-	glEnd();
+	for (int i = 0; i < num_vertex; i++)
+	{
+		center = getPosition(nodes, i);
+		drawCircle(center, 0.1, color, 100);
+	}
 
-	Vector dir(2);
-	dir[0] = cos(current_time);
-	dir[1] = sin(current_time);
-	center = center_rotation + 1.0*dir;
+	// glBegin(GL_POLYGON);
+	// glVertex2f(-0.5, -0.5);
+	// glVertex2f(-0.5,  0.5);
+	// glVertex2f(0.5,  0.5);
+	// glVertex2f(0.5, -0.5);
+	// glEnd();
 
-	drawCircle(center, 0.1, color, 100);
+	// Vector dir(2);
+	// dir[0] = cos(current_time);
+	// dir[1] = sin(current_time);
+	// center = center_rotation + 1.0*dir;
+
+	// drawCircle(center, 0.1, color, 100);
 
 	glFlush();
 
@@ -105,6 +115,8 @@ void init()
 
 int main(int argc, char** argv) 
 {
+	initVertices(nodes, &num_vertex, "simulation1.txt");
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(640, 640);

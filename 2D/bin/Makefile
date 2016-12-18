@@ -9,4 +9,4 @@ windowsvis:
 	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp -I../include -L../lib -lm -lglut32 -lopengl32 -lglu32
 
 macvis:
-	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp -I../include -L../lib -Wno-deprecated -lm -framework GLUT -framework OpenGL -framework Cocoa
+	g++ -o visualization ../src/2dvisualization.cpp ../src/Vector.cpp ../src/simulation.cpp -I../include -L../lib -Wno-deprecated -lm -framework GLUT -framework OpenGL -framework Cocoa
