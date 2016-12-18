@@ -6,7 +6,7 @@ void f()
 	printf("f was called\n");
 }
 
-void initVertices(Vertex** list_of_vertices, int* num_vertices, char* file_name)
+void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name)
 {
 	Vertex *list = new Vertex[2];
 

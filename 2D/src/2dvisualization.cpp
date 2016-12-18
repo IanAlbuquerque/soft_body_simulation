@@ -59,7 +59,7 @@ int num_vertex;
 void display() 
 {
 	double current_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
-	double elapsed_time = current_time - last_time;
+	// double elapsed_time = current_time - last_time;
 	last_time = current_time;
 
 	glClear(GL_COLOR_BUFFER_BIT);
