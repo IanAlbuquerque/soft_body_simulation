@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "Vector.h"
 
 void f()
 {
@@ -8,7 +9,7 @@ void f()
 typedef struct Vertex {
 	int node;
 	double mass;
-	double position;
+	Vector position;
 	int *neighbours;
-	double *coeff;
+	double *coeff_k;
 };
