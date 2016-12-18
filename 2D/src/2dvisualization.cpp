@@ -59,8 +59,12 @@ int num_vertex;
 void display() 
 {
 	double current_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
-	// double elapsed_time = current_time - last_time;
+	double elapsed_time = current_time - last_time;
 	last_time = current_time;
+
+/*	printVertices(nodes, num_vertex);
+	printf("\n");*/
+	simulate(nodes, num_vertex, elapsed_time);
 
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -118,7 +122,6 @@ void init()
 int main(int argc, char** argv) 
 {
 	initVertices(&nodes, &num_vertex, "simulation1.txt");
-	printVertices(nodes, num_vertex);
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);

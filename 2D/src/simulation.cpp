@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "simulation.h"
 
-#define GRAVITY_CTE 0.05
+#define GRAVITY_CTE 0.00
 
 void f()
 {
@@ -32,18 +32,18 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	n1[0] = 1;
 
 	double *c1 = new double[1];
-	c1[0] = 1;
+	c1[0] = 0;
 
 	double *d = new double[1];
 	d[0] = (*position1 - *position2).norm();
 
-	Vertex one = { .node = 0, .mass = 0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
+	Vertex one = { .node = 0, .mass = 1.0, .position = position1, .velocity = velocity1, .neighbours = n1, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
 	list[0] = one;
 
 	int *n2 = new int[1];
 	n2[0] = 0;
 
-	Vertex two = { .node = 1, .mass = 0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
+	Vertex two = { .node = 1, .mass = 1.0, .position = position2, .velocity = velocity2, .neighbours = n2, .coeff_k = c1, .rest_r = d, .num_neighbours = 1 };
 	list[1] = two;
 
 	*list_of_vertices = list;
@@ -91,7 +91,7 @@ void derivative(	Vector position,
 	}
 
 	*d_position = velocity;
-	*d_velocity = force / v.mass;
+	*d_velocity = force / (double) v.mass;
 }
 
 void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate)
@@ -104,15 +104,15 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 	Vector d_position(2);
 	Vector d_velocity(2);
 
-	double h = time_to_simulate;
+	double h = (double) time_to_simulate;
 
 	for(int i=0; i<num_vertices; i++)
 	{
 		new_positions[i] = new Vector(2);
 		new_velocities[i] = new Vector(2);
 
-		*new_positions[i] = 0;
-		*new_velocities[i] = 0;
+		*(new_positions[i]) = 0;
+		*(new_velocities[i]) = 0;
 
 		position = *(list_of_vertices[i].position);
 		velocity = *(list_of_vertices[i].velocity);
@@ -126,11 +126,12 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					i,
 					list_of_vertices,
 					GRAVITY_CTE);
-		position = *(list_of_vertices[i].position) + h*d_position;
-		velocity = *(list_of_vertices[i].position) + h*d_velocity;
 
-		*new_positions[i] += position;
-		*new_velocities[i] += velocity;
+		position = *(list_of_vertices[i].position) + h*d_position;
+		velocity = *(list_of_vertices[i].velocity) + h*d_velocity;
+
+		*(new_positions[i]) += position;
+		*(new_velocities[i]) += velocity;
 
 		// --------------- step 2
 
@@ -141,11 +142,12 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					i,
 					list_of_vertices,
 					GRAVITY_CTE);
-		position = *(list_of_vertices[i].position) + h/2.0*d_position;
-		velocity = *(list_of_vertices[i].position) + h/2.0*d_velocity;
 
-		*new_positions[i] += 2*position;
-		*new_velocities[i] += 2*velocity;
+		position = *(list_of_vertices[i].position) + h/2.0*d_position;
+		velocity = *(list_of_vertices[i].velocity) + h/2.0*d_velocity;
+
+		*(new_positions[i]) += 2*position;
+		*(new_velocities[i]) += 2*velocity;
 
 		// --------------- step 3
 
@@ -156,11 +158,13 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					i,
 					list_of_vertices,
 					GRAVITY_CTE);
-		position = *(list_of_vertices[i].position) + h/2.0*d_position;
-		velocity = *(list_of_vertices[i].position) + h/2.0*d_velocity;
 
-		*new_positions[i] += 2*position;
-		*new_velocities[i] += 2*velocity;
+
+		position = *(list_of_vertices[i].position) + h/2.0*d_position;
+		velocity = *(list_of_vertices[i].velocity) + h/2.0*d_velocity;
+
+		*(new_positions[i]) += 2*position;
+		*(new_velocities[i]) += 2*velocity;
 
 		// --------------- step 4
 
@@ -172,13 +176,15 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 					list_of_vertices,
 					GRAVITY_CTE);
 		position = *(list_of_vertices[i].position) + h*d_position;
-		velocity = *(list_of_vertices[i].position) + h*d_velocity;
+		velocity = *(list_of_vertices[i].velocity) + h*d_velocity;
 
-		*new_positions[i] += position;
-		*new_velocities[i] += velocity;
+		*(new_positions[i]) += position;
+		*(new_velocities[i]) += velocity;
 
-		*new_positions[i] /= 6.0;
-		*new_velocities[i] /= 6.0;
+		*(new_positions[i]) /= 6.0;
+		*(new_velocities[i]) /= 6.0;
+
+
 	}
 
 	for(int i=0; i<num_vertices; i++)
@@ -186,7 +192,7 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 		delete list_of_vertices[i].position;
 		delete list_of_vertices[i].velocity;
 		list_of_vertices[i].position = new_positions[i];
-		list_of_vertices[i].position = new_velocities[i];
+		list_of_vertices[i].velocity = new_velocities[i];
 	}
 
 	delete new_positions;
