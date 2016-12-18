@@ -23,7 +23,11 @@ void initVertices(Vertex* list_of_vertices, int* num_vertices, char* file_name)
 	Vector position(2);
 	position[0] = 0.5;
 	position[1] = 0.5;
-	Vertex one = { .node = 0, .mass = 0, .position = position, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL };
+
+	Vector velocity(2);
+	position[0] = 0.5;
+	position[1] = 0.5;
+	Vertex one = { .node = 0, .mass = 0, .position = position, .velocity = velocity, .neighbours = NULL, .coeff_k = NULL, .rest_r = NULL };
 
 	list[0] = one;
 
