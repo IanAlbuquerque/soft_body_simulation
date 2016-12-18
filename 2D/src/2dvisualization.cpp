@@ -16,6 +16,7 @@
 #include "simulation.h"
 #include <time.h>
 #include <stdio.h>
+#include <string.h>
 
 void setDrawingColor(Vector color)
 {
@@ -135,7 +136,19 @@ void init()
 
 int main(int argc, char** argv) 
 {
-	initVertices(&nodes, &num_vertex, "../in/test_01.sim");
+	if (argc != 2) 
+    {
+    	printf("Wrong variables number\n");
+        exit(1);
+    }
+
+    char *path = (char*)malloc(1024*sizeof(char));
+    strcpy(path, "../in/");
+    strcat(path, argv[1]);
+    strcat(path, ".sim");
+    printf("Path: %s\n", path);
+
+	initVertices(&nodes, &num_vertex, path);
 	printVertices(nodes, num_vertex);
 
 	glutInit(&argc, argv);
