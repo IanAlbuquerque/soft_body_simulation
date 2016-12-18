@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include "Vector.h"
+#include "simulation.h"
 
 void f()
 {
 	printf("f was called\n");
 }
 
-typedef struct Vertex {
+struct _Vertex {
 	int node;
 	double mass;
 	Vector position;
