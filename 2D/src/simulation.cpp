@@ -93,6 +93,11 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		list[i].num_neighbours = 0;
 		list[i].fixed = (bool) int_fix;
 
+		if(list[i].fixed == true)
+		{
+			*(list[i].velocity) = 0;
+		}
+
 		list[i].neighbours = new int[num_neig];
 		list[i].coeff_k = new double[num_neig];
 		list[i].coeff_c = new double[num_neig];
@@ -295,20 +300,51 @@ void fillWithConstraintForces(	Vector* forces,
 			{
 				dp = *(list_of_vertices[i].position) - *(list_of_vertices[neig].position);
 				dv = *(list_of_vertices[i].velocity) - *(list_of_vertices[neig].velocity);
+
+				if(list_of_vertices[neig].fixed == true)
+				{
+					dv = *(list_of_vertices[i].velocity);
+				}
+				else if(list_of_vertices[i].fixed == true)
+				{
+					dv = -1 * *(list_of_vertices[neig].velocity);
+				}
+
 				dp_norm = dp.norm();
 				dp_normalized = dp / dp_norm;
 
 				dp_normalized_deriv = (dp.dot(dp) * dv - dp.dot(dv) * dp)/ (dp_norm*dp_norm*dp_norm);
 
-				J[k][2*i] += dp_normalized[0];
-				J[k][2*i+1] += dp_normalized[1];
-				J[k][2*neig] -= dp_normalized[0];
-				J[k][2*neig+1] -= dp_normalized[1];
+				if(list_of_vertices[neig].fixed == true)
+				{
+					dv = *(list_of_vertices[i].velocity);
+					J[k][2*i] += 2*dp_normalized[0];
+					J[k][2*i+1] += 2*dp_normalized[1];
 
-				J_deriv[k][2*i] += dp_normalized_deriv[0];
-				J_deriv[k][2*i+1] += dp_normalized_deriv[1];
-				J_deriv[k][2*neig] -= dp_normalized_deriv[0];
-				J_deriv[k][2*neig+1] -= dp_normalized_deriv[1];
+					J_deriv[k][2*i] += 2*dp_normalized_deriv[0];
+					J_deriv[k][2*i+1] += 2*dp_normalized_deriv[1];
+				}
+				else if(list_of_vertices[i].fixed == true)
+				{
+					dv = -1 * *(list_of_vertices[neig].velocity);
+					J[k][2*neig] -= 2*dp_normalized[0];
+					J[k][2*neig+1] -= 2*dp_normalized[1];
+
+					J_deriv[k][2*neig] -= 2*dp_normalized_deriv[0];
+					J_deriv[k][2*neig+1] -= 2*dp_normalized_deriv[1];
+				}
+				else
+				{
+					J[k][2*i] += dp_normalized[0];
+					J[k][2*i+1] += dp_normalized[1];
+					J[k][2*neig] -= dp_normalized[0];
+					J[k][2*neig+1] -= dp_normalized[1];
+
+					J_deriv[k][2*i] += dp_normalized_deriv[0];
+					J_deriv[k][2*i+1] += dp_normalized_deriv[1];
+					J_deriv[k][2*neig] -= dp_normalized_deriv[0];
+					J_deriv[k][2*neig+1] -= dp_normalized_deriv[1];
+				}
 
 				k++;
 			}
@@ -353,6 +389,13 @@ void fillWithDerivatives(	Vector* d_positions,
 	{
 		d_positions[i] = *(list_of_vertices[i].velocity);
 		d_velocities[i] =  (regular_forces[i] + constraint_forces[i]) / list_of_vertices[i].mass;
+
+		if(list_of_vertices[i].fixed == true)
+		{
+			d_positions[i] = 0.0;
+			d_velocities[i] = 0.0;
+		}
+
 	}
 
 	delete[] regular_forces;
