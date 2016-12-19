@@ -10,7 +10,9 @@ class Vector
 	private:
 		double* elements;
 		int size;
+		static int default_size;
 	public:
+		Vector(); //T
 		Vector(const int n); //T
 		Vector(const Vector &other); //T
 		~Vector();
@@ -39,6 +41,8 @@ class Vector
 		const double dot(const Vector& v) const; //T
 		const double norm() const; //T
 		friend ostream& operator<<(ostream& os, const Vector& other); //T
+
+		static void setDefaultSize(int n);
 };
 
 const Vector operator+(double constant, const Vector& v); //T

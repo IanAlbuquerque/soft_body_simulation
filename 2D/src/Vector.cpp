@@ -4,9 +4,23 @@
 
 using namespace std;
 
+extern int Vector::default_size;
+
 /*****************************
 	INIT & DEINIT
 *****************************/
+
+void Vector::setDefaultSize(int n)
+{
+	Vector::default_size = n;
+}
+
+Vector::Vector()
+{
+	int n = Vector::default_size;
+	size = n;
+	elements = new double[size];
+}
 
 Vector::Vector(const int n)
 {

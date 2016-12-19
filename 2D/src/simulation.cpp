@@ -177,143 +177,183 @@ void printVertices(Vertex* list_of_vertices, int num_vertices)
 	}
 }
 
-void derivative(	Vector position,
-					Vector velocity,
-					Vector* d_position,
-					Vector* d_velocity,
-					int vertex_index,
-					Vertex* list_of_vertices,
-					double gravity)
+void fillWithRegularForces(	Vector* forces,
+							Vertex* list_of_vertices,
+							int num_vertices,
+							double gravity)
 {
 	Vector force(2);
-	Vertex v = list_of_vertices[vertex_index];
+	Vertex vertex;
 	Vector d(2);
 	double d_norm;
 	int neighbour_index;
 	Vertex neighbour;
 
-	force[0] = 0;
- 	force[1] = -gravity*v.mass;
-
-	for(int i=0; i<v.num_neighbours; i++)
+	for(int i=0; i<num_vertices; i++)
 	{
-		neighbour_index = v.neighbours[i];
-		neighbour = list_of_vertices[neighbour_index];
-		d = *(neighbour.position) - position;
-		d_norm = d.norm();
-		force += v.coeff_k[i] * ( d_norm - v.rest_r[i]) * d / d_norm;
-	}
+		vertex = list_of_vertices[i];
 
-	*d_position = velocity;
-	*d_velocity = force / (double) v.mass;
+		force[0] = 0;
+	 	force[1] = -gravity*vertex.mass;
+
+		for(int j=0; j<vertex.num_neighbours; j++)
+		{
+			neighbour_index = vertex.neighbours[j];
+			neighbour = list_of_vertices[neighbour_index];
+			d = *(neighbour.position) - *(vertex.position);
+			d_norm = d.norm();
+
+			force += vertex.coeff_k[j] * ( d_norm - vertex.rest_r[j]) * d / d_norm;
+		}
+
+		forces[i] = force;
+	}
+	return;
 }
 
-void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gravity)
+void fillWithDerivatives(	Vector* d_positions,
+							Vector* d_velocities,
+							Vertex* list_of_vertices,
+							int num_vertices,
+							double gravity)
 {
-	Vector** new_positions = new Vector*[num_vertices];
-	Vector** new_velocities = new Vector*[num_vertices];
-
-	Vector position(2);
-	Vector velocity(2);
-	Vector d_position(2);
-	Vector d_velocity(2);
+	Vector::setDefaultSize(2);
+	Vector* forces = new Vector[num_vertices];
+	
+	fillWithRegularForces(forces, list_of_vertices, num_vertices, gravity);
 
 	for(int i=0; i<num_vertices; i++)
 	{
-		new_positions[i] = new Vector(2);
-		new_velocities[i] = new Vector(2);
-
-		*(new_positions[i]) = 0;
-		*(new_velocities[i]) = 0;
-
-		if(list_of_vertices[i].fixed)
-		{
-			*(new_positions[i]) = *(list_of_vertices[i].position);
-			*(new_velocities[i]) = 0.0;
-			continue;
-		}
-
-		position = *(list_of_vertices[i].position);
-		velocity = *(list_of_vertices[i].velocity);
-
-		// --------------- step 1
-
-		derivative(	position,
-					velocity,
-					&d_position,
-					&d_velocity,
-					i,
-					list_of_vertices,
-					gravity);
-
-		position = *(list_of_vertices[i].position) + h*d_position;
-		velocity = *(list_of_vertices[i].velocity) + h*d_velocity;
-
-		*(new_positions[i]) += position;
-		*(new_velocities[i]) += velocity;
-
-		// --------------- step 2
-
-		derivative(	position,
-					velocity,
-					&d_position,
-					&d_velocity,
-					i,
-					list_of_vertices,
-					gravity);
-
-		position = *(list_of_vertices[i].position) + h/2.0*d_position;
-		velocity = *(list_of_vertices[i].velocity) + h/2.0*d_velocity;
-
-		*(new_positions[i]) += 2*position;
-		*(new_velocities[i]) += 2*velocity;
-
-		// --------------- step 3
-
-		derivative(	position,
-					velocity,
-					&d_position,
-					&d_velocity,
-					i,
-					list_of_vertices,
-					gravity);
-
-
-		position = *(list_of_vertices[i].position) + h/2.0*d_position;
-		velocity = *(list_of_vertices[i].velocity) + h/2.0*d_velocity;
-
-		*(new_positions[i]) += 2*position;
-		*(new_velocities[i]) += 2*velocity;
-
-		// --------------- step 4
-
-		derivative(	position,
-					velocity,
-					&d_position,
-					&d_velocity,
-					i,
-					list_of_vertices,
-					gravity);
-		position = *(list_of_vertices[i].position) + h*d_position;
-		velocity = *(list_of_vertices[i].velocity) + h*d_velocity;
-
-		*(new_positions[i]) += position;
-		*(new_velocities[i]) += velocity;
-
-		*(new_positions[i]) /= 6.0;
-		*(new_velocities[i]) /= 6.0;
+		d_positions[i] = *(list_of_vertices[i].velocity);
+		d_velocities[i] =  forces[i] / list_of_vertices[i].mass;
 	}
 
+	delete[] forces;
+}
+
+void fillWithCopy(		Vertex* new_list,
+						Vertex* list_of_vertices,
+						int num_vertices)
+{
+	for(int i=0; i<num_vertices; i++)
+	{
+		new_list[i].mass = list_of_vertices[i].mass;
+		new_list[i].num_neighbours = list_of_vertices[i].num_neighbours;
+		new_list[i].fixed = list_of_vertices[i].fixed;
+
+		new_list[i].position = new Vector(2);
+		*(new_list[i].position) = *(list_of_vertices[i].position);
+
+		new_list[i].velocity = new Vector(2);
+		*(new_list[i].velocity) = *(list_of_vertices[i].velocity);
+
+		new_list[i].neighbours = new int[list_of_vertices[i].num_neighbours];
+		new_list[i].coeff_k = new double[list_of_vertices[i].num_neighbours];
+		new_list[i].rest_r = new double[list_of_vertices[i].num_neighbours];
+		for(int j=0; j<list_of_vertices[i].num_neighbours; j++)
+		{
+			(new_list[i].neighbours)[j] = (list_of_vertices[i].neighbours)[j];
+			(new_list[i].coeff_k)[j] = (list_of_vertices[i].coeff_k)[j];
+			(new_list[i].rest_r)[j] = (list_of_vertices[i].rest_r)[j];
+		}
+	}
+}
+
+void updateWithStep(		Vertex* list_after_step,
+							Vector* d_positions,
+							Vector* d_velocities,
+							Vertex* list_of_vertices,
+							int num_vertices,
+							double step)
+{
+	for(int i=0; i<num_vertices; i++)
+	{
+		if(list_after_step[i].fixed == false)
+		{
+			*(list_after_step[i].position) = *(list_of_vertices[i].position) + step * d_positions[i];
+			*(list_after_step[i].velocity) = *(list_of_vertices[i].velocity) + step * d_velocities[i];
+		}
+		else
+		{
+			*(list_after_step[i].position) = *(list_of_vertices[i].position);
+			*(list_after_step[i].velocity) = 0;
+		}
+	}
+}
+
+void freeList(Vertex* list_of_vertices, int num_vertices)
+{
 	for(int i=0; i<num_vertices; i++)
 	{
 		delete list_of_vertices[i].position;
 		delete list_of_vertices[i].velocity;
-		list_of_vertices[i].position = new_positions[i];
-		list_of_vertices[i].velocity = new_velocities[i];
+		delete[] list_of_vertices[i].neighbours;
+		delete[] list_of_vertices[i].coeff_k;
+		delete[] list_of_vertices[i].rest_r;
+	}
+	delete[] list_of_vertices;	
+}
+
+void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gravity)
+{
+	Vector::setDefaultSize(2);
+	Vector* new_positions = new Vector[num_vertices];
+	Vector* new_velocities = new Vector[num_vertices];
+	Vector* d_positions = new Vector[num_vertices];
+	Vector* d_velocities = new Vector[num_vertices];
+
+	for(int i=0; i<num_vertices; i++)
+	{
+		new_positions[i] = 0.0;
+		new_velocities[i] = 0.0;
 	}
 
+	Vertex* aux_list = new Vertex[num_vertices];
+	fillWithCopy(aux_list, list_of_vertices, num_vertices);
+
+	fillWithDerivatives(d_positions, d_velocities, list_of_vertices, num_vertices, gravity);
+	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h);
+	for(int i=0; i<num_vertices; i++)
+	{
+		new_positions[i] += *(aux_list[i].position);
+		new_velocities[i] += *(aux_list[i].velocity);
+	}
+
+	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity);
+	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h/2.0);
+	for(int i=0; i<num_vertices; i++)
+	{
+		new_positions[i] += *(aux_list[i].position) * 2.0;
+		new_velocities[i] += *(aux_list[i].velocity) * 2.0;
+	}
+
+	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity);
+	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h/2.0);
+	for(int i=0; i<num_vertices; i++)
+	{
+		new_positions[i] += *(aux_list[i].position) * 2.0;
+		new_velocities[i] += *(aux_list[i].velocity) * 2.0;
+	}
+
+	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity);
+	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h);
+	for(int i=0; i<num_vertices; i++)
+	{
+		new_positions[i] += *(aux_list[i].position);
+		new_velocities[i] += *(aux_list[i].velocity);
+	}
+
+	for(int i=0; i<num_vertices; i++)
+	{
+		*(list_of_vertices[i].position) = new_positions[i]/6.0;
+		*(list_of_vertices[i].velocity) = new_velocities[i]/6.0;
+	}
+
+	freeList(aux_list, num_vertices);
 	delete[] new_positions;
-	delete[] new_velocities;	
+	delete[] new_velocities;
+	delete[] d_positions;
+	delete[] d_velocities;
 }
 
 void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step)
@@ -343,7 +383,6 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 		}
 		if(last_h > DBL_EPSILON)
 		{
-			printf("LAST");
 			rungeKutta(list_of_vertices, num_vertices, last_h, gravity);
 		}
 	}

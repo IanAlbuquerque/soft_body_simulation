@@ -6,13 +6,15 @@
 
 struct _Vertex {
 	double mass;
+	int num_neighbours;
+	bool fixed;
+
 	Vector *position;
 	Vector *velocity;
+	
 	int *neighbours;
 	double *coeff_k;
 	double *rest_r;
-	int num_neighbours;
-	bool fixed;
 };
 
 typedef struct _Vertex Vertex;
