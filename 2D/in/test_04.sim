@@ -1,41 +1,41 @@
 h= 0.01
 g= 10.0
 num_v= 6
-num_e= 8
+num_e= 7
 
 pos= -3.0 4.0
 vel= 0.0 0.0
-mass= 10
+mass= 1
 num_neig= 1
 fix= 1
 
 pos= -1.0 4.0
 vel= 0.0 0.0
-mass= 10
+mass= 1
 num_neig= 1
 fix= 1
 
 pos= 1.0 1.0
 vel= 0.0 0.0
-mass= 10
+mass= 1
 num_neig= 4
 fix= 0
 
 pos= 3.0 1.0
 vel= 0.0 0.0
-mass= 10
+mass= 1
 num_neig= 4
 fix= 0
 
 pos= 1.0 -1.0
 vel= 0.0 0.0
-mass= 10
+mass= 1
 num_neig= 3
 fix= 0
 
 pos= 3.0 -1.0
 vel= 0.0 0.0
-mass= 10
+mass= 1
 num_neig= 3
 fix= 0
 
@@ -74,7 +74,3 @@ k= 1000.0
 c= 1.0
 rigid= 1
 
-ver= 3 4
-k= 1000.0
-c= 1.0
-rigid= 1
