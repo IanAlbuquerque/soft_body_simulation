@@ -176,8 +176,11 @@ void mouseMove(int x, int y)
 		{
 			if((mouse - *(nodes[i].position)).norm() < 0.3)
 			{
-				*(nodes[i].position) = mouse;
-				*(nodes[i].velocity) = 0;
+				if(nodes[i].fixed)
+				{
+					*(nodes[i].position) = mouse;
+					*(nodes[i].velocity) = 0;
+				}
 			}
 		}
 	}
