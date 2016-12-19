@@ -29,6 +29,8 @@ fix= 0
 
 ver= 0 2
 k= 40
+rigid= 0
 
 ver= 1 3
 k= 10
+rigid= 0
