@@ -60,6 +60,7 @@ int num_vertex;
 
 double g;
 double h;
+int rigid_bars_count;
 
 void display() 
 {
@@ -140,7 +141,7 @@ void update(void)
 	double elapsed_time = current_time - last_time;
 	last_time = (double)glutGet(GLUT_ELAPSED_TIME)/1000.0;
 
-	simulate(nodes, num_vertex, elapsed_time, g, h);
+	simulate(nodes, num_vertex, elapsed_time, g, h, rigid_bars_count);
 }
 
 void mouse(int button, int state, int x, int y)
@@ -168,7 +169,7 @@ int main(int argc, char** argv)
     strcat(path, ".sim");
     printf("Path: %s\n", path);
 
-	initVertices(&nodes, &num_vertex, path, &g, &h);
+	initVertices(&nodes, &num_vertex, path, &g, &h, &rigid_bars_count);
 
 	delete[] path;
 

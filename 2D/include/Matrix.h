@@ -54,7 +54,7 @@ public:
 	const Vector operator*(const Vector &other) const;
 	const int getNumRows() const;
 	const int getNumCols() const;
-	const Vector solve(Vector b) const;
+	Vector solve(Vector b) const;
 	const Matrix pivot(Vector* b) const;
 	void swapLines(const int line1, const int line2);
 

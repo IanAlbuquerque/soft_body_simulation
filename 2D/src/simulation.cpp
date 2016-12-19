@@ -2,8 +2,11 @@
 #include "simulation.h"
 #include <stdexcept>
 #include <float.h>
+#include "Matrix.h"
+#include "Vector.h"
 
-void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, double* gravity, double* step)
+
+void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file_name, double* gravity, double* step, int* rigid_bars_count)
 {
 	FILE* input_file;
 	int num_vertices_read;
@@ -25,6 +28,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	double dist;
 	double g;
 	double h;
+	int num_rigid;
 
 	input_file = fopen(file_name, "r");
 	if(input_file == NULL)
@@ -94,6 +98,8 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		list[i].rigid = new bool[num_neig];
 	}
 
+	num_rigid = 0;
+
 	for(int i=0; i<num_edges_read; i++)
 	{
 		if(fscanf(input_file, " ver= %d %d", &v1, &v2) != 2)
@@ -118,6 +124,11 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		list[v1].rigid[list[v1].num_neighbours] = (bool) int_rigid;
 		list[v2].rigid[list[v2].num_neighbours] = (bool) int_rigid;
 
+		if(int_rigid == 1)
+		{
+			num_rigid++;
+		}
+
 		dist = (*(list[v1].position) - *(list[v2].position)).norm();
 		list[v1].rest_r[list[v1].num_neighbours] = dist;
 		list[v2].rest_r[list[v2].num_neighbours] = dist;
@@ -132,6 +143,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	*num_vertices = num_vertices_read;
 	*gravity = g;
 	*step = h;
+	*rigid_bars_count = num_rigid;
 
 /*	Vertex *list = new Vertex[2];
 
@@ -220,24 +232,116 @@ void fillWithRegularForces(	Vector* forces,
 	return;
 }
 
+void fillWithConstraintForces(	Vector* forces,
+								Vector* regular_forces,
+								Vertex* list_of_vertices,
+								int num_vertices,
+								int rigid_bars_count)
+{
+	Matrix W(2*num_vertices, 2*num_vertices);
+	Matrix f(2*num_vertices, 1);
+	Matrix J(rigid_bars_count, 2*num_vertices);
+	Matrix JT(2*num_vertices, rigid_bars_count);
+	Matrix J_deriv(rigid_bars_count, 2*num_vertices);
+	Matrix v(2*num_vertices, 1);
+
+	Matrix _b(rigid_bars_count, 1);
+	Vector fc(2*num_vertices);
+	Vector b(rigid_bars_count);
+
+	int k=0;
+	int neig;
+	double dp_norm;
+	Vector dp;
+	Vector dv;
+	Vector dp_normalized;
+	Vector dp_normalized_deriv;
+
+	Vector lamda(rigid_bars_count);
+
+	W = 0;
+	J = 0;
+	J_deriv = 0;
+	for(int i=0; i<num_vertices; i++)
+	{
+		W[2*i][2*i] = 1.0 / list_of_vertices[i].mass;
+		W[2*i+1][2*i+1] = 1.0 / list_of_vertices[i].mass;
+
+		f[2*i][0] = -regular_forces[i][0];
+		f[2*i+1][0] = -regular_forces[i][1];
+
+		v[2*i][0] = (*(list_of_vertices[i].velocity))[0];
+		v[2*i+1][0] = (*(list_of_vertices[i].velocity))[1];
+
+		for(int j=0; j<list_of_vertices[i].num_neighbours; j++)
+		{
+			neig = list_of_vertices[i].neighbours[j];
+			if(list_of_vertices[i].rigid[j] && i < neig)
+			{
+				dp = *(list_of_vertices[i].position) - *(list_of_vertices[neig].position);
+				dv = *(list_of_vertices[i].velocity) - *(list_of_vertices[neig].velocity);
+				dp_norm = dp.norm();
+				dp_normalized = dp / dp_norm;
+
+				dp_normalized_deriv = (dp.dot(dp) * dv - dp.dot(dv) * dp)/ (dp_norm*dp_norm*dp_norm);
+
+				J[k][2*i] -= dp_normalized[0];
+				J[k][2*i+1] -= dp_normalized[1];
+				J[k][2*neig] += dp_normalized[0];
+				J[k][2*neig+1] += dp_normalized[1];
+
+				J_deriv[k][2*i] -= dp_normalized_deriv[0];
+				J_deriv[k][2*i+1] -= dp_normalized_deriv[1];
+				J_deriv[k][2*neig] += dp_normalized_deriv[0];
+				J_deriv[k][2*neig+1] += dp_normalized_deriv[1];
+
+				k++;
+			}
+		}
+	}
+
+	JT = J.T();
+
+	_b = J*W*f+J_deriv*v;
+	_b *= -1;
+	for(int i=0; i<rigid_bars_count; i++)
+	{
+		b[i] = _b[i][0];
+	}
+
+	lamda = (J*W*JT).solve(b);
+
+	fc = JT * lamda;
+
+	for(int i=0; i<num_vertices; i++)
+	{
+		forces[i][0] = fc[2*i];
+		forces[i][1] = fc[2*i+1];
+	}
+}
+
 void fillWithDerivatives(	Vector* d_positions,
 							Vector* d_velocities,
 							Vertex* list_of_vertices,
 							int num_vertices,
-							double gravity)
+							double gravity,
+							int rigid_bars_count)
 {
 	Vector::setDefaultSize(2);
-	Vector* forces = new Vector[num_vertices];
+	Vector* regular_forces = new Vector[num_vertices];
+	Vector* constraint_forces = new Vector[num_vertices];
 	
-	fillWithRegularForces(forces, list_of_vertices, num_vertices, gravity);
+	fillWithRegularForces(regular_forces, list_of_vertices, num_vertices, gravity);
+	fillWithConstraintForces(constraint_forces, regular_forces, list_of_vertices, num_vertices, rigid_bars_count);
 
 	for(int i=0; i<num_vertices; i++)
 	{
 		d_positions[i] = *(list_of_vertices[i].velocity);
-		d_velocities[i] =  forces[i] / list_of_vertices[i].mass;
+		d_velocities[i] =  (regular_forces[i] + constraint_forces[i]) / list_of_vertices[i].mass;
 	}
 
-	delete[] forces;
+	delete[] regular_forces;
+	delete[] constraint_forces;
 }
 
 void fillWithCopy(		Vertex* new_list,
@@ -306,7 +410,7 @@ void freeList(Vertex* list_of_vertices, int num_vertices)
 	delete[] list_of_vertices;	
 }
 
-void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gravity)
+void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gravity, int rigid_bars_count)
 {
 	Vector::setDefaultSize(2);
 	Vector* new_positions = new Vector[num_vertices];
@@ -323,7 +427,7 @@ void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gra
 	Vertex* aux_list = new Vertex[num_vertices];
 	fillWithCopy(aux_list, list_of_vertices, num_vertices);
 
-	fillWithDerivatives(d_positions, d_velocities, list_of_vertices, num_vertices, gravity);
+	fillWithDerivatives(d_positions, d_velocities, list_of_vertices, num_vertices, gravity, rigid_bars_count);
 	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h);
 	for(int i=0; i<num_vertices; i++)
 	{
@@ -331,7 +435,7 @@ void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gra
 		new_velocities[i] += *(aux_list[i].velocity);
 	}
 
-	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity);
+	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity, rigid_bars_count);
 	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h/2.0);
 	for(int i=0; i<num_vertices; i++)
 	{
@@ -339,7 +443,7 @@ void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gra
 		new_velocities[i] += *(aux_list[i].velocity) * 2.0;
 	}
 
-	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity);
+	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity, rigid_bars_count);
 	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h/2.0);
 	for(int i=0; i<num_vertices; i++)
 	{
@@ -347,7 +451,7 @@ void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gra
 		new_velocities[i] += *(aux_list[i].velocity) * 2.0;
 	}
 
-	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity);
+	fillWithDerivatives(d_positions, d_velocities, aux_list, num_vertices, gravity, rigid_bars_count);
 	updateWithStep(aux_list, d_positions, d_velocities, list_of_vertices, num_vertices, h);
 	for(int i=0; i<num_vertices; i++)
 	{
@@ -368,7 +472,7 @@ void rungeKutta(Vertex* list_of_vertices, int num_vertices, double h, double gra
 	delete[] d_velocities;
 }
 
-void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step)
+void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulate, double gravity, double step, int rigid_bars_count)
 {
 	double h;
 	int num_iterations;
@@ -391,11 +495,11 @@ void simulate(Vertex* list_of_vertices, int num_vertices, double time_to_simulat
 	{
 		for(int i=0; i<num_iterations; i++)
 		{
-			rungeKutta(list_of_vertices, num_vertices, h, gravity);
+			rungeKutta(list_of_vertices, num_vertices, h, gravity, rigid_bars_count);
 		}
 		if(last_h > DBL_EPSILON)
 		{
-			rungeKutta(list_of_vertices, num_vertices, last_h, gravity);
+			rungeKutta(list_of_vertices, num_vertices, last_h, gravity, rigid_bars_count);
 		}
 	}
 }

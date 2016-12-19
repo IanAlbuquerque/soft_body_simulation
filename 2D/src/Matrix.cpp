@@ -392,10 +392,10 @@ const int Matrix::getNumCols() const
 	return this->num_cols;
 }
 
-const Vector Matrix::solve(Vector b) const
+Vector Matrix::solve(Vector b) const
 {
 	Matrix A = this->pivot(&b);
-	cout << "A: " << endl << A << endl << "b: " << b << endl;
+	//cout << "A: " << endl << A << endl << "b: " << b << endl;
 	Vector x = Vector(A.num_rows);
 	double f, s;
 
