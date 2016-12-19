@@ -28,6 +28,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 	double dist;
 	double g;
 	double h;
+	double c;
 	int num_rigid;
 
 	input_file = fopen(file_name, "r");
@@ -94,6 +95,7 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 
 		list[i].neighbours = new int[num_neig];
 		list[i].coeff_k = new double[num_neig];
+		list[i].coeff_c = new double[num_neig];
 		list[i].rest_r = new double[num_neig];
 		list[i].rigid = new bool[num_neig];
 	}
@@ -110,6 +112,10 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO k= k");
 		}
+		if(fscanf(input_file, " c= %lf", &c) != 1)
+		{
+			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO k= k");
+		}
 		if(fscanf(input_file, " rigid= %d", &int_rigid) != 1)
 		{
 			throw std::runtime_error("SINTAXE ARQUIVO INVALIDA: FALTANDO rigid= 0 ou 1");
@@ -120,6 +126,9 @@ void initVertices(Vertex** list_of_vertices, int* num_vertices, const char* file
 
 		list[v1].coeff_k[list[v1].num_neighbours] = k;
 		list[v2].coeff_k[list[v2].num_neighbours] = k;
+
+		list[v1].coeff_c[list[v1].num_neighbours] = c;
+		list[v2].coeff_c[list[v2].num_neighbours] = c;
 
 		list[v1].rigid[list[v1].num_neighbours] = (bool) int_rigid;
 		list[v2].rigid[list[v2].num_neighbours] = (bool) int_rigid;
@@ -230,6 +239,7 @@ void fillWithRegularForces(	Vector* forces,
 			d_norm = d.norm();
 
 			force += vertex.coeff_k[j] * ( d_norm - vertex.rest_r[j]) * d / d_norm;
+			force += vertex.coeff_c[j] * *(vertex.velocity);
 		}
 
 		forces[i] = force;
@@ -367,12 +377,14 @@ void fillWithCopy(		Vertex* new_list,
 
 		new_list[i].neighbours = new int[list_of_vertices[i].num_neighbours];
 		new_list[i].coeff_k = new double[list_of_vertices[i].num_neighbours];
+		new_list[i].coeff_c = new double[list_of_vertices[i].num_neighbours];
 		new_list[i].rest_r = new double[list_of_vertices[i].num_neighbours];
 		new_list[i].rigid = new bool[list_of_vertices[i].num_neighbours];
 		for(int j=0; j<list_of_vertices[i].num_neighbours; j++)
 		{
 			(new_list[i].neighbours)[j] = (list_of_vertices[i].neighbours)[j];
 			(new_list[i].coeff_k)[j] = (list_of_vertices[i].coeff_k)[j];
+			(new_list[i].coeff_c)[j] = (list_of_vertices[i].coeff_c)[j];
 			(new_list[i].rest_r)[j] = (list_of_vertices[i].rest_r)[j];
 			(new_list[i].rigid)[j] = (list_of_vertices[i].rigid)[j];
 		}
@@ -409,6 +421,7 @@ void freeList(Vertex* list_of_vertices, int num_vertices)
 		delete list_of_vertices[i].velocity;
 		delete[] list_of_vertices[i].neighbours;
 		delete[] list_of_vertices[i].coeff_k;
+		delete[] list_of_vertices[i].coeff_c;
 		delete[] list_of_vertices[i].rest_r;
 		delete[] list_of_vertices[i].rigid;
 	}

@@ -14,6 +14,7 @@ struct _Vertex {
 
 	int *neighbours;
 	double *coeff_k;
+	double *coeff_c;
 	double *rest_r;
 	bool *rigid;
 };
