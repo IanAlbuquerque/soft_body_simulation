@@ -5,12 +5,13 @@
 
 using namespace std;
 
+static int _VECTOR_DEFAULT_SIZE = 2;
+
 class Vector
 {
 	private:
 		double* elements;
 		int size;
-		static int default_size;
 	public:
 		Vector(); //T
 		Vector(const int n); //T
@@ -43,7 +44,14 @@ class Vector
 		void swapLines(const int line1, const int line2);
 		friend ostream& operator<<(ostream& os, const Vector& other); //T
 
-		static void setDefaultSize(int n);
+		static void setDefaultSize(int n)
+		{
+			_VECTOR_DEFAULT_SIZE = n;
+		}
+		static int getDefaultSize()
+		{
+			return _VECTOR_DEFAULT_SIZE;
+		}
 };
 
 const Vector operator+(double constant, const Vector& v); //T
