@@ -1,13 +1,19 @@
 h= 0.01
 g= 10.0
-num_v= 2
-num_e= 1
+num_v= 3
+num_e= 2
 
 pos= -2.0 0.0
 vel= 0.0 0.0
 mass= 10
 num_neig= 1
 fix= 1
+
+pos= 0.0 0.0
+vel= 0.0 0.0
+mass= 10
+num_neig= 1
+fix= 0
 
 pos= 2.0 0.0
 vel= 0.0 0.0
@@ -16,5 +22,9 @@ num_neig= 1
 fix= 0
 
 ver= 0 1
+k= 1000.0
+rigid= 0
+
+ver= 1 2
 k= 1000.0
 rigid= 1
