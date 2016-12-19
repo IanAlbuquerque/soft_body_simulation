@@ -239,7 +239,7 @@ void fillWithRegularForces(	Vector* forces,
 			d_norm = d.norm();
 
 			force += vertex.coeff_k[j] * ( d_norm - vertex.rest_r[j]) * d / d_norm;
-			force += vertex.coeff_c[j] * *(vertex.velocity);
+			force += -vertex.coeff_c[j] * *(vertex.velocity);
 		}
 
 		forces[i] = force;
