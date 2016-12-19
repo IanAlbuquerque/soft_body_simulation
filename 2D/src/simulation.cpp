@@ -219,6 +219,11 @@ void fillWithRegularForces(	Vector* forces,
 
 		for(int j=0; j<vertex.num_neighbours; j++)
 		{
+			if(vertex.rigid[j])
+			{
+				continue;
+			}
+
 			neighbour_index = vertex.neighbours[j];
 			neighbour = list_of_vertices[neighbour_index];
 			d = *(neighbour.position) - *(vertex.position);
@@ -267,8 +272,8 @@ void fillWithConstraintForces(	Vector* forces,
 		W[2*i][2*i] = 1.0 / list_of_vertices[i].mass;
 		W[2*i+1][2*i+1] = 1.0 / list_of_vertices[i].mass;
 
-		f[2*i][0] = -regular_forces[i][0];
-		f[2*i+1][0] = -regular_forces[i][1];
+		f[2*i][0] = regular_forces[i][0];
+		f[2*i+1][0] = regular_forces[i][1];
 
 		v[2*i][0] = (*(list_of_vertices[i].velocity))[0];
 		v[2*i+1][0] = (*(list_of_vertices[i].velocity))[1];
@@ -285,15 +290,15 @@ void fillWithConstraintForces(	Vector* forces,
 
 				dp_normalized_deriv = (dp.dot(dp) * dv - dp.dot(dv) * dp)/ (dp_norm*dp_norm*dp_norm);
 
-				J[k][2*i] -= dp_normalized[0];
-				J[k][2*i+1] -= dp_normalized[1];
-				J[k][2*neig] += dp_normalized[0];
-				J[k][2*neig+1] += dp_normalized[1];
+				J[k][2*i] += dp_normalized[0];
+				J[k][2*i+1] += dp_normalized[1];
+				J[k][2*neig] -= dp_normalized[0];
+				J[k][2*neig+1] -= dp_normalized[1];
 
-				J_deriv[k][2*i] -= dp_normalized_deriv[0];
-				J_deriv[k][2*i+1] -= dp_normalized_deriv[1];
-				J_deriv[k][2*neig] += dp_normalized_deriv[0];
-				J_deriv[k][2*neig+1] += dp_normalized_deriv[1];
+				J_deriv[k][2*i] += dp_normalized_deriv[0];
+				J_deriv[k][2*i+1] += dp_normalized_deriv[1];
+				J_deriv[k][2*neig] -= dp_normalized_deriv[0];
+				J_deriv[k][2*neig+1] -= dp_normalized_deriv[1];
 
 				k++;
 			}
