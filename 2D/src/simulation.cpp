@@ -247,6 +247,11 @@ void fillWithRegularForces(	Vector* forces,
 			force += -vertex.coeff_c[j] * *(vertex.velocity);
 		}
 
+		if(list_of_vertices[i].fixed == true)
+		{
+			force = 0.0;
+		}
+
 		forces[i] = force;
 	}
 	return;

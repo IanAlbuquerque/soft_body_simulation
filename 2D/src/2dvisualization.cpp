@@ -144,8 +144,43 @@ void update(void)
 	simulate(nodes, num_vertex, elapsed_time, g, h, rigid_bars_count);
 }
 
+bool can_move = false;
 void mouse(int button, int state, int x, int y)
 {
+	Vector mouse(2);
+	mouse[0] = x * 10.0 / 640.0 - 5.0;
+	mouse[1] = -(y * 10.0 / 640.0 - 5.0);
+	if(button == GLUT_LEFT_BUTTON)
+	{
+		if(state == GLUT_DOWN)
+		{
+			can_move = true;
+		}
+		else
+		{
+			can_move = false;
+		}
+	}
+	glutPostRedisplay();
+    return;
+}
+
+void mouseMove(int x, int y)
+{
+	Vector mouse(2);
+	mouse[0] = x * 10.0 / 640.0 - 5.0;
+	mouse[1] = -(y * 10.0 / 640.0 - 5.0);
+	if(can_move)
+	{
+		for(int i=0; i<num_vertex; i++)
+		{
+			if((mouse - *(nodes[i].position)).norm() < 0.3)
+			{
+				*(nodes[i].position) = mouse;
+				*(nodes[i].velocity) = 0;
+			}
+		}
+	}
 	glutPostRedisplay();
     return;
 }
@@ -181,6 +216,7 @@ int main(int argc, char** argv)
 	glutDisplayFunc(display);
     glutIdleFunc (update);
 	glutMouseFunc(mouse);
+	glutMotionFunc(mouseMove);
 	init();
 	glutMainLoop();
 }
