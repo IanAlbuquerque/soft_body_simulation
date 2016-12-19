@@ -1,0 +1,48 @@
+h= 0.01
+g= 0.0
+num_v= 4
+num_e= 4
+
+pos= -1.0 -1.0
+vel= 0.0 0.0
+mass= 1
+num_neig= 1
+fix= 0
+
+pos= -1.0 0.0
+vel= 0.0 0.0
+mass= 1
+num_neig= 1
+fix= 0
+
+pos= 1.0 0.0
+vel= 0.0 0.0
+mass= 1
+num_neig= 4
+fix= 0
+
+pos= 1.0 -1.0
+vel= 0.0 0.0
+mass= 1
+num_neig= 4
+fix= 0
+
+ver= 0 1
+k= 100.0
+c= 0.2
+rigid= 1
+
+ver= 0 3
+k= 100.0
+c= 0.2
+rigid= 1
+
+ver= 1 2
+k= 100.0
+c= 0.2
+rigid= 1
+
+ver= 2 3
+k= 1000.0
+c= 0.2
+rigid= 1
