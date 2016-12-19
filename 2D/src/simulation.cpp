@@ -301,15 +301,6 @@ void fillWithConstraintForces(	Vector* forces,
 				dp = *(list_of_vertices[i].position) - *(list_of_vertices[neig].position);
 				dv = *(list_of_vertices[i].velocity) - *(list_of_vertices[neig].velocity);
 
-				if(list_of_vertices[neig].fixed == true)
-				{
-					dv = *(list_of_vertices[i].velocity);
-				}
-				else if(list_of_vertices[i].fixed == true)
-				{
-					dv = -1 * *(list_of_vertices[neig].velocity);
-				}
-
 				dp_norm = dp.norm();
 				dp_normalized = dp / dp_norm;
 
@@ -317,21 +308,19 @@ void fillWithConstraintForces(	Vector* forces,
 
 				if(list_of_vertices[neig].fixed == true)
 				{
-					dv = *(list_of_vertices[i].velocity);
-					J[k][2*i] += 2*dp_normalized[0];
-					J[k][2*i+1] += 2*dp_normalized[1];
+					J[k][2*i] += dp_normalized[0];
+					J[k][2*i+1] += dp_normalized[1];
 
-					J_deriv[k][2*i] += 2*dp_normalized_deriv[0];
-					J_deriv[k][2*i+1] += 2*dp_normalized_deriv[1];
+					J_deriv[k][2*i] += dp_normalized_deriv[0];
+					J_deriv[k][2*i+1] += dp_normalized_deriv[1];
 				}
 				else if(list_of_vertices[i].fixed == true)
 				{
-					dv = -1 * *(list_of_vertices[neig].velocity);
-					J[k][2*neig] -= 2*dp_normalized[0];
-					J[k][2*neig+1] -= 2*dp_normalized[1];
+					J[k][2*neig] -= dp_normalized[0];
+					J[k][2*neig+1] -= dp_normalized[1];
 
-					J_deriv[k][2*neig] -= 2*dp_normalized_deriv[0];
-					J_deriv[k][2*neig+1] -= 2*dp_normalized_deriv[1];
+					J_deriv[k][2*neig] -= dp_normalized_deriv[0];
+					J_deriv[k][2*neig+1] -= dp_normalized_deriv[1];
 				}
 				else
 				{
