@@ -38,6 +38,7 @@ class Vector
 		const int getDimension() const; //T
 		const double dot(const Vector& v) const; //T
 		const double norm() const; //T
+		void swapLines(const int line1, const int line2);
 		friend ostream& operator<<(ostream& os, const Vector& other); //T
 };
 

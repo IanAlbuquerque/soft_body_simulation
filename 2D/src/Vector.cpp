@@ -272,6 +272,13 @@ const double Vector::norm() const
 	return sqrt(this->dot(*this));
 }
 
+void Vector::swapLines(const int line1, const int line2)
+{
+	double aux = this->elements[line1];
+	this->elements[line1] = this->elements[line2];
+	this->elements[line2] = aux;
+}
+
 ostream& operator<<(ostream& os, const Vector& other)
 {
 	os << '(';

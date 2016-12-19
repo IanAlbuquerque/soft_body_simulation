@@ -2,6 +2,7 @@
 #include "Matrix.h"
 #include <stdexcept>
 #include <iostream>
+#include <math.h>
 
 using namespace std;
 
@@ -389,4 +390,69 @@ const int Matrix::getNumRows() const
 const int Matrix::getNumCols() const
 {
 	return this->num_cols;
+}
+
+const Vector Matrix::solve(Vector b) const
+{
+	Matrix A = this.pivot(b);
+	Vector x = Vector(A->num_rows);
+	double f, s;
+
+	for (int j = 0; j < A->num_cols; j++)
+	{
+		for (int i = j + 1; i < A->num_rows; i++)
+		{
+			f = A[i][j] / A[j][j];
+			for (int k = j; k < A->num_rows; k++)
+			{
+				A[i][k] *= - A[j][k]*f;
+			}
+			b[i] -= b[j] * f;
+		}
+	}
+
+	for (int i = A->num_rows - 1; i >= 0; i--)
+	{
+		s = 0;
+		for (int j = A->num_rows - 1; j > i; j--)
+		{
+			s += A[i][j] * x[j];
+		}
+		x[i] = (b[i] - s)/A[i][i];
+	}
+
+	return x;
+}
+
+const Matrix Matrix::pivot(Vector b) const
+{
+	Matrix P = this;
+	int pivot;
+
+	for (int j = 0; j < P->num_cols - 1; j++)
+	{
+		pivot = j;
+		for (int i = j + 1; i < P->num_rows; i++)
+		{
+			if (fabs(P[i][j]) > (fabs(P[pivot][j])))
+			{
+				pivot = i;
+			}
+			P.swapLines(pivot, j);
+			b.swapLines(pivot, j);
+		}
+	}
+
+	return P;
+}
+
+void Matrix::swapLines(const int line1, const int line2)
+{
+	double aux;
+	for (int j = 0; j < this->num_cols; j++)
+	{
+		aux = this[line1][j];
+		this[line1][j] = this[line2][j];
+		this[line2][j] = aux;
+	}
 }
