@@ -87,6 +87,14 @@ void display()
 			one_pos = getPosition(nodes, i);
 			two_pos = getPosition(nodes, nodes[i].neighbours[j]);
 
+			if(nodes[i].rigid[j] == true)
+			{
+				glColor3f(0.0, 0.5, 0.0); // JMU Purple
+			}
+			else
+			{
+				glColor3f(1.0, 0.0, 1.0); // JMU Purple
+			}
 			glBegin(GL_LINES);
 			glVertex2f(one_pos[0], one_pos[1]);
 			glVertex2f(two_pos[0], two_pos[1]);

@@ -11,10 +11,11 @@ struct _Vertex {
 
 	Vector *position;
 	Vector *velocity;
-	
+
 	int *neighbours;
 	double *coeff_k;
 	double *rest_r;
+	bool *rigid;
 };
 
 typedef struct _Vertex Vertex;
